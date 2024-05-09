@@ -25,6 +25,8 @@ def get_face(frame):
     obama_image = face_recognition.load_image_file("know/Mishana.jpg")
     obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
+    artemida_image = face_recognition.load_image_file("know/photo_2024-05-09_23-05-17.jpg")
+    artemida_face_encoding = face_recognition.face_encodings(artemida_image)[0]
     # Load a second sample picture and learn how to recognize it.
     biden_image = face_recognition.load_image_file("biden.jpg")
     biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
@@ -32,10 +34,12 @@ def get_face(frame):
     # Create arrays of known face encodings and their names
     known_face_encodings = [
         obama_face_encoding,
+        artemida_face_encoding,
         biden_face_encoding
     ]
     known_face_names = [
         "Mishana",
+        "Artem Kondratiev",
         "Joe Biden"
     ]
     
