@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  $("start-capture").click(() => {
+  $(".start-capture").click(() => {
     $.ajax({
       method: "POST",
       url: "/start_capture",
@@ -12,16 +12,16 @@ $(document).ready(() => {
       },
     });
   });
-  $("stop-capture").click(() => {
+  $(".stop-capture").click(() => {
     $.ajax({
       method: "POST",
       url: "/stop_capture",
       dataType: "json",
       success: (data) => {
         alert("сбор данных успешно oстановлен");
-        d = JSON.parse(data);
+        console.log(data);
         htmlStr = "";
-        d.students.forEach((element) => {
+        data.students.forEach((element) => {
           htmlStr += `<li>${element}</li>`;
         });
         $(".students-on-lesson").html(`

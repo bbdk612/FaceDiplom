@@ -6,7 +6,7 @@ import threading
 class CameraCapturing:
 
     def __init__(self, camera_url=0, student_images_path_name=[]):
-        self.cap = cv2.VideoCapture(camera_url, cv2.CAP_V4L)
+        self.cap = cv2.VideoCapture(camera_url, cv2.CAP_V4L2)
         self.face_locations = []
         self.face_encodings = []
         self.face_names = set()

@@ -5,16 +5,22 @@ from CameraCapturing import CameraCapturing
 app = Flask(__name__, static_folder="./templates/static")
 app.config["SECRET_KEY"] = "secret!"
 
-cap = CameraCapturing(0, [["know/Mishana.jpg", "Mishana"]])
-
-@app.route('/start_capture')
+cap = None
+@app.route('/start_capture', methods=["POST"])
 def start_cap():
+    global cap
+    if cap is None:
+        cap = CameraCapturing(0, [["know/Mishana.jpg", "Mishana"], ["know/photo_2024-05-09_23-05-17.jpg", "Artem"]])
     cap.start()
     return jsonify({"message": "Zaebis"})
 
-@app.route('/stop-capture')
+@app.route('/stop_capture', methods=["POST"])
 def stop_cap():
+    global cap
+    
     students = cap.stop_capturing()
+    cap = None
+    print()
     return jsonify({"students": students})
 
 @app.route("/")
