@@ -1,6 +1,5 @@
 import cv2
 import face_recognition
-import datetime
 import threading
 
 class CameraCapturing:
@@ -49,20 +48,8 @@ class CameraCapturing:
                         # name = known_face_names[best_match_index]
 
                     self.face_names.add(name)
-                print(self.face_names)
                 # Display the results
                 # cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                for (top, right, bottom, left), name in zip(face_locations, list(self.face_names)):
-                    # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-                    # Draw a box around the face
-                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-                    # Draw a label with a name below the face
-                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                    font = cv2.FONT_HERSHEY_DUPLEX
-                    cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-                cv2.imwrite(f"templates/static/{datetime.datetime.now().strftime('%d%m%Y.%H%M%S')}.jpg", frame)
                 # time.sleep(10)
 
         self.cap.release()

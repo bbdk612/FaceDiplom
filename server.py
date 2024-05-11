@@ -1,9 +1,11 @@
 import numpy as np
 from flask import Flask, render_template, send_from_directory, jsonify
 from CameraCapturing import CameraCapturing
+from core import app, login_manager
 
-app = Flask(__name__, static_folder="./templates/static")
-app.config["SECRET_KEY"] = "secret!"
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 cap = None
 @app.route('/start_capture', methods=["POST"])
@@ -26,7 +28,3 @@ def stop_cap():
 @app.route("/")
 def index():
     return render_template("index.html")
-
-
-if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
