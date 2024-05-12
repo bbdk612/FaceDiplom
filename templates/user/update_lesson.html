@@ -1,0 +1,8 @@
+{% extends "base.html" %} {% from "macroces/field_macro.html" import
+render_field_data, render_field %} {% block content %}
+<form method="POST" action="">
+  {{ render_field_data(form.name, lesson.theme) }}
+  <div>{{ render_field(form.auditory) }}</div>
+  {{ render_field(form.submit) }}
+</form>
+{% endblock %}

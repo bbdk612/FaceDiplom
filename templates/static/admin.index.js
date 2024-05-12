@@ -29,7 +29,21 @@ $(document).ready(() => {
       },
     });
   });
-
+  $(".auditory_button-delete").click((e) => {
+    let id = e.target.id;
+    $.ajax({
+      method: "POST",
+      url: `/auditory/delete/${id}`,
+      dataType: "json",
+      success: (data) => {
+        $(`li#auditory_${id}`).hide(20);
+        alert(data.message);
+      },
+      error: () => {
+        alert("Что-то пошло не так");
+      },
+    });
+  });
   $(".logout").click(() => {
     $.ajax({
       method: "POST",

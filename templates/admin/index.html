@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% from "macroces/datalist_macro.html" import render_user_data, render_student_data %}
+{% from "macroces/datalist_macro.html" import render_user_data, render_student_data, render_auditory_data %}
 
 {% block content %}
 {% if messages %}
@@ -33,6 +33,13 @@
     <a class="student-load" href="/student/create" type=button>Cоздать</a>
   </div>
   {{ render_student_data(students, student_class) }}
+</div>
+<div>
+  <div>
+    <h2>Аудитории</h2>
+    <a class="auditory-load" href="/auditory/create" type=button>Cоздать</a>
+  </div>
+  {{ render_auditory_data(auditories, auditory_class) }}
 </div>
 {% endblock %}
 

@@ -1,0 +1,7 @@
+{% extends "base.html" %} {% from "macroces/field_macro.html" import
+render_field %} {% block content %}
+<form action="" method="POST">
+  {{ form.csrf_tocken }} {{ render_field(form.number(placeholder="4/401")) }} {{
+  render_field(form.camera_address) }} {{ render_field(form.submit) }}
+</form>
+{% endblock %}

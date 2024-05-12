@@ -54,9 +54,6 @@ class User(db.Model, UserMixin):
     def update(old_user_id: int, new_user: dict):
         old_user = User.query.filter_by(id=old_user_id).first()
         old_user.fio = new_user["fio"]
-        old_user.login = new_user["login"]
-        old_user.is_admin = new_user["is_admin"]
-        old_user.set_password(new_user["password"])
         db.session.commit()
 
     @staticmethod
@@ -119,7 +116,7 @@ class Auditory(db.Model):
     
     @staticmethod
     def delete(auditory_id):
-        auditory = Auditory.query(id=auditory_id).first()
+        auditory = Auditory.query.filter_by(id=auditory_id).first()
         db.session.delete(auditory)
         db.session.commit()
     
@@ -132,17 +129,26 @@ class Auditory(db.Model):
 class Course(db.Model):
     __tablename__ = "course"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
+    name = db.Column(db.String(200), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     lesson = db.relationship("Lesson", back_populates="course")
     user = db.relationship("User", back_populates="course") 
     course_student = db.relationship("Course_Student", back_populates="course", cascade="all, delete")
     
+    def __init__(self, name, user_id):
+        self.name = name
+        self.user_id = user_id
+
     @staticmethod
     def create(course):
-        db.session.add(course)
-        db.session.commit()
+        check = Course.query.filter_by(name=course.name).first()
+        if not check:
+            db.session.add(course)
+            db.session.commit()
+            return {"id": course.id, "message": "Курс успешно создан"}
+        else: 
+            return {"id": -1, "message": "Курс с таким именем уже существует, придумайте другой"}
     
     @staticmethod
     def delete(course_id):
@@ -152,9 +158,15 @@ class Course(db.Model):
     
     @staticmethod
     def update(course_id, new_name):
-        course = Auditory.query.filter_by(id=course_id).first()
-        course.camera_name = new_name
-        db.session.commit()
+        course = Course.query.filter_by(id=course_id).first()
+        check = Course.query.filter_by(id=new_name).first()
+        if not check:
+            course.name = new_name
+            db.session.commit()
+            return {"id": course.id, "message": "Курс успешно создан"}
+        else:
+            return {"id": -1, "message": "Курс с таким именем уже существует, придумайте другой"}
+
 
 class Course_Student(db.Model):
     __tablename__ = "course_student"
@@ -175,11 +187,9 @@ class Course_Student(db.Model):
         db.session.commit()
 
     @staticmethod
-    def delete(course_id, student_id):
-        course_students = Course_Student.query.filter_by(course_id=course_id, student_id=student_id).all()
-        for course_student in course_students:
-            db.session.delete(course_student)
-            db.session.commit()
+    def delete(cs):
+        db.session.delete(cs)
+        db.session.commit()
 
 class Lesson(db.Model):
     __tablename__ = "lesson"
@@ -189,8 +199,8 @@ class Lesson(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey("course.id"))
     auditory_id = db.Column(db.Integer, db.ForeignKey("auditory.id"))
 
-    course = db.relationship("Course", back_populates="lesson", cascade="all, delete")
-    auditory = db.relationship("Auditory", back_populates="lesson", cascade="all, delete")
+    course = db.relationship("Course", back_populates="lesson")
+    auditory = db.relationship("Auditory", back_populates="lesson")
     lesson_student = db.relationship("Lesson_Student", back_populates="lesson", cascade="all, delete") 
 
     def __init__(self, theme:str, course_id:int, auditory_id:int):
@@ -200,6 +210,7 @@ class Lesson(db.Model):
 
     def set_date(self, date):
         self.datetime = date
+        db.session.commit()
 
     @staticmethod 
     def create(lesson):
@@ -209,13 +220,15 @@ class Lesson(db.Model):
     @staticmethod
     def delete(id):
         lesson = Lesson.query.filter_by(id=id).first()
-        db.query.delete(lesson)
+        db.session.delete(lesson)
+        db.session.commit()
 
     @staticmethod
     def update(id, new_data):
         lesson = Lesson.query.filter_by(id=id).first()
         lesson.theme = new_data["theme"]
-        lesson.datetime = new_data["datetime"]
+        lesson.auditory_id = new_data["new_auditory"]
+        db.session.commit()
 
 class Lesson_Student(db.Model):
     __tablename__ = "lesson_student"
@@ -224,8 +237,8 @@ class Lesson_Student(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"))
     lesson_id = db.Column(db.Integer, db.ForeignKey("lesson.id"))
 
-    student = db.relationship("Student", back_populates="lesson_student", cascade="all, delete") 
-    lesson = db.relationship("Lesson", back_populates="lesson_student", cascade="all, delete") 
+    student = db.relationship("Student", back_populates="lesson_student") 
+    lesson = db.relationship("Lesson", back_populates="lesson_student") 
     
     def __init__(self, student_id, lesson_id):
         self.student_id = student_id
@@ -240,6 +253,11 @@ class Lesson_Student(db.Model):
     @staticmethod 
     def create(ls):
         db.session.add(ls)
+        db.session.commit()
+    
+    @staticmethod
+    def delete(ls):
+        db.session.delete(ls)
         db.session.commit()
 
 with app.app_context():

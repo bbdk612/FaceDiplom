@@ -66,7 +66,14 @@ def index():
     if current_user.is_authenticated:
         if current_user.is_admin:
             return redirect("/admin")
+
+        courses_data = Course.query.filter_by(user_id=current_user.id).all()
+        courses = []
+ 
+        for course in courses_data: 
+            lessons = Lesson.query.filter_by(course_id=course.id)
+            courses.append([course,lessons])
         
-        return render_template("user/index.html")
+        return render_template("user/index.html", user_id=current_user.id, courses=courses)
 
     return redirect("/login/")

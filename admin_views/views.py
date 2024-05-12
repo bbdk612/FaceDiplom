@@ -1,8 +1,8 @@
 from core import app
 from flask_login import login_required
 from flask import render_template, request, redirect, jsonify, flash, get_flashed_messages
-from models import User, Student
-from forms import UpdateUserForm, MakeUserForm, MakeStudentForm
+from models import User, Student, Auditory
+from forms import UpdateUserForm, MakeUserForm, MakeStudentForm, AuditoryForm
 
 def init_admin_routes():
     @app.route("/admin")
@@ -11,8 +11,18 @@ def init_admin_routes():
         users  = User.query.filter_by(is_admin=False).all()
         admins = User.query.filter_by(is_admin=True).all()
         students = Student.query.all()
+        auditories = Auditory.query.all()
         messages = get_flashed_messages()
-        return render_template("admin/index.html", users=users, admins=admins, user_class="user", messages=messages, student_class="student", students=students)
+        return render_template("admin/index.html", 
+                               users=users, 
+                               admins=admins, 
+                               user_class="user", 
+                               messages=messages, 
+                               student_class="student", 
+                               students=students,
+                               auditories=auditories,
+                               auditory_class="auditory"
+                               )
     
     @app.route("/user/delete/<user_id>", methods=["POST"])
     @login_required
@@ -34,9 +44,6 @@ def init_admin_routes():
         if request.method == "POST" and form.validate():
             user = {
                 "fio":form.fio.data,
-                "login":form.login.data,
-                "is_admin":form.is_admin.data,
-                "password": form.password.data
             }
             User.update(user_id, user)
             return redirect("/admin")
@@ -88,3 +95,24 @@ def init_admin_routes():
             return redirect("/admin")
 
         return render_template("admin/make_student.html", form=form)
+
+    @app.route("/auditory/create", methods=["GET", "POST"])
+    @login_required
+    def create_auditory():
+        form = AuditoryForm(request.form)
+
+        if request.method == "POST" and form.validate():
+            auditory = Auditory(number=form.number.data, camera_address=form.number.data)
+            data = Auditory.create(auditory)
+            if data["id"] == -1:
+                flash(data["message"])
+            else:
+                flash(data["message"])
+                return redirect("/admin")
+        return render_template("admin/make_auditory.html", form=form)
+
+    @app.route("/auditory/delete/<auditory_id>", methods=["POST", "GET"])
+    @login_required
+    def delete_auditory(auditory_id):
+        Auditory.delete(auditory_id=auditory_id)
+        return jsonify({"message": "Аудитория успешно удалена"})

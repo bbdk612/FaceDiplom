@@ -8,7 +8,7 @@ class CameraCapturing:
         self.cap = cv2.VideoCapture(camera_url, cv2.CAP_V4L2)
         self.face_locations = []
         self.face_encodings = []
-        self.face_names = set()
+        self.face_names = []
         self.know_image_encodings = []
         self.know_image_names = []
         self.capturing = False
@@ -25,13 +25,13 @@ class CameraCapturing:
         
     def start_capturing(self):
         while self.capturing:
-            print(self.capturing)
             suc, frame = self.cap.read()
             if suc:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 face_locations = face_recognition.face_locations(frame)
                 face_encodings = face_recognition.face_encodings(frame, face_locations)
                 name = ""
+                face_names = []
                 for face_encoding in face_encodings:
                     # See if the face is a match for the known face(s)
                     matches = face_recognition.compare_faces(self.know_image_encodings, face_encoding)
@@ -42,7 +42,8 @@ class CameraCapturing:
                         first_match_index = matches.index(True)
                         name = self.know_image_names[first_match_index]
 
-                    self.face_names.add(name)
+                    face_names.append(name)
+                self.face_names = face_names
 
         self.cap.release()
     

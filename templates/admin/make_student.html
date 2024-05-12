@@ -1,7 +1,12 @@
-{% extends "base.html" %} {% from "macroces/field_macro.html" import
-render_field %} {% block content %}
+{% extends "base.html" %} 
+
+{% from "macroces/field_macro.html" import render_field %} 
+
+{% block content %}
 <form action="" method="POST">
-  {{ form.csrf_tocken }} {{ render_field(form.fio) }} {{
-  render_field(form.image_url) }} {{ render_field(form.submit) }}
+  {{ form.csrf_tocken }} 
+  {{ render_field(form.fio) }} 
+  {{ render_field(form.image_url) }} 
+  {{ render_field(form.submit) }}
 </form>
 {% endblock %}
