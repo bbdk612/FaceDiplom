@@ -1,0 +1,18 @@
+{% macro render_user_data(data, data_class) %}
+<ul class="{{ data_class }}_list">
+  {% for d in data %}
+  <li class="{{ data_class }}_item">
+    <a href="/{{data_class}}/update/{{d.id}}">{{ d.fio }}</a>
+    <span>
+      <button
+        type="button"
+        class="{{ data_class }}_button delete"
+        id="{{ d.id }}"
+      >
+        Удалить
+      </button>
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}

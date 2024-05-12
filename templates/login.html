@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+
+{% from "macroces/field_macro.html" import render_field %}
+
+{% block content %}
+<form action="" method="post">
+  {{ form.csrf_tocken }}
+  {{ render_field(form.login) }}
+  {{ render_field(form.password) }} 
+  {{ render_field(form.remember_me) }}
+  <div class="form-submit">{{ form.submit }}</div>
+</form>
+{% endblock %}

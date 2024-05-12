@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+
+{% from "field_macro.html" import render_field %}
+
+{% block content %} {% if messages %} {% for message
+in messages %}
+<p>{{ message }}</p>
+{% endfor %} {% endif %}
+
+<form action="" method="POST">
+  {{ form.csrf_tocken }}
+  {{ render_field(form.fio) }}
+  {{ render_field(form.login) }}
+  {{ render_field(form.password) }}
+  {{ render_field(form.confirm) }}
+  {{ render_field(form.is_admin) }}
+  {{ render_field(form.submit) }}
+</form>
+{% endblock %}

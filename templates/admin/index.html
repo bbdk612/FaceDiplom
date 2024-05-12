@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% from "macroces/datalist_macro.html" import render_user_data %}
+
+{% block content %}
+<h1>ADMIN</h1>
+
+<div>
+  <div>
+    <h2>Преподаватели</h2>
+    <a class="user-load" href="/user/create" type=button>Загрузить</a>
+    <button class="user-create" type=button>Создать</button>
+  </div>
+  {{ render_user_data(users, data_class) }}
+</div>
+<div>
+  <div>
+    <h2>Администраторы</h2>
+    <a class="admin-load" href="/admin/create" type=button>Загрузить</a>
+    <button class="admin-create" type=button>Создать</button>
+  </div>
+  {{ render_user_data(admins, data_class) }}
+</div>
+{% endblock %}

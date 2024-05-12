@@ -1,0 +1,16 @@
+{% macro render_field(field) %}
+<div class="form-group">
+  {{ field.label }} {{ field }} {% if field.errors %} {% for error in
+  field.errors %}
+  <p>{{ error }}</p>
+  {% endfor %} {% endif %}
+</div>
+{% endmacro %} {% macro render_field_data(field, data) %}
+<div class="form-group">
+  {{ field.label }} {% if data == True %} {{ field(checked=data) }} {% else %}
+  {{ field(value=data) }} {% endif %} {% if field.errors %} {% for error in
+  field.errors %}
+  <p>{{ error }}</p>
+  {% endfor %} {% endif %}
+</div>
+{% endmacro %}

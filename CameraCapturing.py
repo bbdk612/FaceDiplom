@@ -17,6 +17,7 @@ class CameraCapturing:
             face_encoding = face_recognition.face_encodings(image)[0]
             self.know_image_encodings.append(face_encoding)
             self.know_image_names.append(student_image_path_name[1])
+    
     def start(self):
         self.capturing = True
         self.thread = threading.Thread(target=self.start_capturing)
@@ -41,16 +42,7 @@ class CameraCapturing:
                         first_match_index = matches.index(True)
                         name = self.know_image_names[first_match_index]
 
-                    # Or instead, use the known face with the smallest distance to the new face
-                    # face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-                    # best_match_index = np.argmin(face_distances)
-                    # if matches[best_match_index]:
-                        # name = known_face_names[best_match_index]
-
                     self.face_names.add(name)
-                # Display the results
-                # cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-                # time.sleep(10)
 
         self.cap.release()
     

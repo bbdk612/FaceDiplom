@@ -14,3 +14,4 @@ login_manager.init_app(app)
 
 import models
 import server
+import admin_views
