@@ -1,8 +1,8 @@
 from core import app
 from flask_login import login_required
-from flask import render_template, request, redirect
-from models import User
-from forms import UpdateUserForm
+from flask import render_template, request, redirect, jsonify, flash, get_flashed_messages
+from models import User, Student
+from forms import UpdateUserForm, MakeUserForm, MakeStudentForm
 
 def init_admin_routes():
     @app.route("/admin")
@@ -10,9 +10,24 @@ def init_admin_routes():
     def admin():
         users  = User.query.filter_by(is_admin=False).all()
         admins = User.query.filter_by(is_admin=True).all()
-        return render_template("admin/index.html", users=users, admins=admins, data_class="user")
+        students = Student.query.all()
+        messages = get_flashed_messages()
+        return render_template("admin/index.html", users=users, admins=admins, user_class="user", messages=messages, student_class="student", students=students)
+    
+    @app.route("/user/delete/<user_id>", methods=["POST"])
+    @login_required
+    def user_delete(user_id):
+        User.delete(user_id)
+        return jsonify({"message": "Пользавотель успешо удален"})
+    
+    @app.route("/student/delete/<user_id>", methods=["POST"])
+    @login_required
+    def student_delete(user_id):
+        Student.delete(user_id)
+        return jsonify({"message": "Пользавотель успешо удален"})
 
     @app.route('/user/update/<user_id>', methods=["GET", "POST"])
+    @login_required
     def user_update(user_id):
         old_user = User.query.filter_by(id=user_id).first()
         form = UpdateUserForm(request.form)
@@ -26,3 +41,50 @@ def init_admin_routes():
             User.update(user_id, user)
             return redirect("/admin")
         return render_template("user/update.html", form=form, old_user=old_user)
+    
+    @app.route("/user/create", methods=["GET", "POST"])
+    @login_required
+    def user_create():
+        form = MakeUserForm(request.form)
+        if request.method == "POST" and form.validate():
+            user = User(login=form.login.data, fio=form.fio.data, is_admin=False)
+            data = User.create(user, form.password.data)
+            if data["id"] == -1:
+                flash(data["message"])
+                return redirect("/user/create")
+            else: 
+                flash(data["message"])
+                return redirect("/admin")
+
+        messages = get_flashed_messages()
+        return render_template("admin/make_user.html", form=form, messages=messages)
+
+    @app.route("/admin/create", methods=["GET", "POST"])
+    # @login_required
+    def admin_create():
+        form = MakeUserForm(request.form)
+        if request.method == "POST" and form.validate():
+            user = User(login=form.login.data, fio=form.fio.data, is_admin=True)
+            data = User.create(user, form.password.data)
+            if data["id"] == -1:
+                flash(data["message"])
+                return redirect("/admin/create")
+            else: 
+                flash(data["message"])
+                return redirect("/admin")
+
+        messages = get_flashed_messages()
+        return render_template("admin/make_user.html", form=form, messages=messages)
+
+    @app.route("/student/create", methods=["GET", "POST"])
+    @login_required
+    def student_create():
+        form = MakeStudentForm(request.form)
+        if request.method == "POST" and form.validate():
+            print(form.fio.data)
+            stud = Student(fio=str(form.fio.data), image_url=form.image_url.data)
+            Student.create(student=stud)
+            flash("Студент успешно создан")
+            return redirect("/admin")
+
+        return render_template("admin/make_student.html", form=form)

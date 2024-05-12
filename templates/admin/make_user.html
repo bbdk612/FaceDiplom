@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 
-{% from "field_macro.html" import render_field %}
+{% from "macroces/field_macro.html" import render_field %}
 
 {% block content %} {% if messages %} {% for message
 in messages %}
@@ -13,7 +13,6 @@ in messages %}
   {{ render_field(form.login) }}
   {{ render_field(form.password) }}
   {{ render_field(form.confirm) }}
-  {{ render_field(form.is_admin) }}
   {{ render_field(form.submit) }}
 </form>
 {% endblock %}

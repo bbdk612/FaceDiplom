@@ -68,13 +68,15 @@ class User(db.Model, UserMixin):
 class Student(db.Model):
     __tablename__ = "student"
     id = db.Column(db.Integer, primary_key=True)
-    fio = db.Column(db.String(100), nullable=False)
+    fio = db.Column(db.String(200), nullable=False)
+    image_url = db.Column(db.String(250), nullable=False)
     
     lesson_student = db.relationship("Lesson_Student", back_populates="student", cascade="all, delete") 
     course_student = db.relationship("Course_Student", back_populates="student", cascade="all, delete")
     
-    def __init__(fio:str):
+    def __init__(self, fio, image_url):
         self.fio = fio
+        self.image_url = image_url
 
     @staticmethod
     def create(student):
@@ -101,7 +103,7 @@ class Auditory(db.Model):
     
     lesson = db.relationship("Lesson", back_populates="auditory", cascade="all, delete")
     
-    def __init__(number: str, camera_address: str):
+    def __init__(self, number: str, camera_address: str):
         self.number = number
         self.camera_address = camera_address
 
@@ -163,7 +165,7 @@ class Course_Student(db.Model):
     student = db.relationship("Student", back_populates="course_student")
     course = db.relationship("Course", back_populates="course_student")
 
-    def __init__(student_id:int, course_id: int):
+    def __init__(self, student_id:int, course_id: int):
         self.student_id = student_id
         self.course_id = course_id
 
@@ -225,7 +227,7 @@ class Lesson_Student(db.Model):
     student = db.relationship("Student", back_populates="lesson_student", cascade="all, delete") 
     lesson = db.relationship("Lesson", back_populates="lesson_student", cascade="all, delete") 
     
-    def __init__(student_id, lesson_id):
+    def __init__(self, student_id, lesson_id):
         self.student_id = student_id
         self.lesson_id = lesson_id
     

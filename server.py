@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory, jsonify, redirect, request, flash, get_flashed_messages
-from flask_login import current_user
+from flask_login import current_user, login_required, logout_user
 from CameraCapturing import CameraCapturing
 from core import app, login_manager
 from forms.LoginForm import LoginForm
@@ -38,6 +38,12 @@ def login():
     
     return render_template("login.html", form=form)
 
+@app.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({"message": "Вы успешно вышли"})
+
 @app.route('/registrate/', methods=["GET", "POST"])
 def registrate():
     form = MakeUserForm(request.form)
@@ -61,6 +67,6 @@ def index():
         if current_user.is_admin:
             return redirect("/admin")
         
-        return render_template("index.html")
+        return render_template("user/index.html")
 
     return redirect("/login/")

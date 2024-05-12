@@ -6,6 +6,5 @@ class MakeUserForm(Form):
     fio = StringField("Ф.И.О.", validators=[InputRequired()])
     login = StringField("Логин", validators=[InputRequired()])
     password = PasswordField("Пароль", validators=[InputRequired(), EqualTo('confirm', message="Пароли должны совпадать")])
-    confirm = PasswordField("Подтвердите пароль", validators=[InputRequired()])
-    is_admin = BooleanField("Это администратор")
+    confirm = PasswordField("Подтвердите пароль")
     submit = SubmitField()
