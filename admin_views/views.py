@@ -54,7 +54,7 @@ def init_admin_routes():
     def user_create():
         form = MakeUserForm(request.form)
         if request.method == "POST" and form.validate():
-            user = User(login=form.login.data, fio=form.fio.data, is_admin=False)
+            user = User(login=form.login.data, fio=form.fio.data, is_admin=False, password=form.password.data)
             data = User.create(user, form.password.data)
             if data["id"] == -1:
                 flash(data["message"])
@@ -71,7 +71,7 @@ def init_admin_routes():
     def admin_create():
         form = MakeUserForm(request.form)
         if request.method == "POST" and form.validate():
-            user = User(login=form.login.data, fio=form.fio.data, is_admin=True)
+            user = User(login=form.login.data, fio=form.fio.data, is_admin=True, password=form.password.data)
             data = User.create(user, form.password.data)
             if data["id"] == -1:
                 flash(data["message"])

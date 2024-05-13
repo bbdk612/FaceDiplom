@@ -42,7 +42,7 @@ $(document).ready(() => {
             students: data.studentsId.join(";"),
           },
           success: () => {
-            // window.location.replace('/')
+            window.location.replace('/')
           },
         });
       },

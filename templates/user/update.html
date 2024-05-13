@@ -4,10 +4,9 @@
 {% block content %}
 <form method="POST">
   {{ form.csrf_tocken }} 
-  {{ render_field_data(form.fio, old_user.fio) }} 
-  {{ render_field_data(form.login, old_user.login) }}
-  {{ render_field_data(form.password, old_user.password) }}
-  {{ render_field_data(form.is_admin, old_user.is_admin) }}
+  {{ render_field_data(form.fio, old_user.fio) }}
+    <p>Логин: {{ old_user.login }}</p>
+    <p>Пароль: {{ old_user.password }}</p>
   {{ render_field(form.submit) }}
 </form>
 {% endblock %}

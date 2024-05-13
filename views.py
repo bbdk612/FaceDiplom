@@ -14,7 +14,7 @@ cap = None
 def start_cap():
     global cap
     if cap is None:
-        auditory_id = Lesson.query.filter_by(id=request.form['lesson_id']).first().auditory_id
+        # auditory_id = Lesson.query.filter_by(id=request.form['lesson_id']).first().auditory_id
         # camera_url = Auditory.query.filter_by(id=auditory_id).first().camera_address
         lesson_students = Lesson_Student.query.filter_by(lesson_id=request.form['lesson_id']).all()
         students = []

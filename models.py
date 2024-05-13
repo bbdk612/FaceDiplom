@@ -14,14 +14,16 @@ class User(db.Model, UserMixin):
     fio = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     login = db.Column(db.String(50), unique=True, nullable=False)
-    password_hash = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(300), nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
     
     course = db.relationship("Course", back_populates="user", cascade="all, delete")
     
-    def __init__(self, login: str, fio:str, is_admin:bool):
+    def __init__(self, login: str, fio:str, is_admin:bool, password:str):
         self.login = login
         self.fio = fio
         self.is_admin = is_admin
+        self.password = password
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)

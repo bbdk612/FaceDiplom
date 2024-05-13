@@ -22,10 +22,10 @@ class CameraCapturing:
     
     def start(self):
         self.capturing = True
-        self.thread = threading.Thread(target=self.start_capturing)
+        self.thread = threading.Thread(target=self.capture)
         self.thread.start()
         
-    def start_capturing(self):
+    def capture(self):
         while self.capturing:
             suc, frame = self.cap.read()
             if suc:
@@ -49,5 +49,6 @@ class CameraCapturing:
     
     def stop_capturing(self):
         self.capturing = False
+        del self.thread
         return list(self.face_names)
 
