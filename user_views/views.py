@@ -1,9 +1,12 @@
+from io import StringIO
+
 from core import app
 from flask_login import login_required, current_user
-from flask import render_template, request, redirect, jsonify, flash, get_flashed_messages
+from flask import render_template, request, redirect, jsonify, flash, get_flashed_messages, Response
 from forms import CoursesForm, LessonForm
 from models import Student, Course, Course_Student, Auditory, Lesson, Lesson_Student
 from datetime import datetime
+import pandas as pd
 
 def user_views_init():
     
@@ -14,7 +17,6 @@ def user_views_init():
         form.students.choices = [(stud.id, stud.fio) for stud in Student.query.order_by(Student.fio).all()]
         
         if request.method == "POST":
-            print(form.students.data)
             course = Course(name=form.name.data, user_id=user_id)
             course_data = Course.create(course)
             if course_data["id"] == -1:
@@ -33,7 +35,7 @@ def user_views_init():
     def update_course(course_id):
         form = CoursesForm(request.form)
         form.students.choices = [(stud.id, stud.fio) for stud in Student.query.order_by(Student.fio).all()]
-        if request.method == "POST" and form.validate():
+        if request.method == "POST":
             css = Course_Student.query.filter_by(course_id=course_id).all()
             for cs in css:
                 Course_Student.delete(cs)
@@ -50,7 +52,7 @@ def user_views_init():
             else:
                 flash("Курс успешно создан")
                 for student in form.students.data:
-                    cs = Course_Student(course_id, student)
+                    cs = Course_Student(course_id=course_id, student_id=student)
                     Course_Student.create(cs)
                     for lesson in lessons:
                         ls = Lesson_Student(lesson_id=lesson.id, student_id=student)
@@ -59,9 +61,40 @@ def user_views_init():
                 return redirect("/")
 
         form.students.data = [cs.student_id for cs in Course_Student.query.filter_by(course_id=course_id).all()]
-        print(form.students.data)
         course = Course.query.filter_by(id=course_id).first()
         return render_template("user/update_course.html", form=form, course=course) 
+    
+    @app.route("/course/report/<course_id>")
+    @login_required
+    def report_course(course_id):
+        table_data = [["ФИО студента", "Отметка по дате занятия"]]
+        course_students = Course_Student.query.filter_by(course_id=course_id).all()
+        students = []
+        for student in course_students:
+            students.append(Student.query.filter_by(id=student.student_id).first())
+        students.sort(key=lambda x: x.fio)
+        lessons = Lesson.query.filter_by(course_id=course_id).filter(Lesson.datetime).order_by().all()
+        lesson_dates = [""] + [lesson.datetime.strftime("%d.%m.%Y") for lesson in lessons]
+        table_data.append(lesson_dates)
+        for student in students:
+            student_row = [student.fio]
+            for lesson in lessons:
+                lesson_students = Lesson_Student.query.filter_by(lesson_id=lesson.id, student_id=student.id).first()
+                if lesson_students.checked:
+                    student_row.append(True)
+                else:
+                    student_row.append(False)
+            table_data.append(student_row)
+        course = Course.query.filter_by(id=course_id).first()
+        buffer = StringIO()
+        table = pd.DataFrame(table_data)
+        table.to_csv(buffer, encoding="utf8", index=False, sep=",")
+        buffer.seek(0)
+        response = Response(buffer, mimetype='text/csv')
+        response.headers.set(
+            "Content-Disposition", "attachment", filename="Order_{0}.csv".format(course.id)
+        )
+        return response
 
     @app.route('/lesson/<course_id>/create', methods=["POST", "GET"])
     @login_required
@@ -75,7 +108,7 @@ def user_views_init():
             flash("Занятие успешно создано")
             students_course = Course_Student.query.filter_by(course_id=course_id).all()
             for student in students_course:
-                ls = Lesson_Student(lesson.id, student.student_id)
+                ls = Lesson_Student(lesson_id=lesson.id, student_id=student.student_id)
                 Lesson_Student.create(ls)
             
             return redirect("/")
@@ -113,5 +146,10 @@ def user_views_init():
     @app.route("/student/check/<lesson_id>", methods=["POST"])
     @login_required
     def student_check(lesson_id):
-        print(request.form["students"])
+        students_ids = request.form['students'].split(";")
+        lss = Lesson_Student.query.filter_by(lesson_id=lesson_id).all()
+        for ls in lss:
+            student = Student.query.filter_by(id=ls.student_id).first()
+            if str(student.id) in students_ids:
+                ls.set_checked()
         return jsonify({"123": "123"}), 200

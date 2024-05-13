@@ -6,6 +6,7 @@
   <a href="/course/{{ user_id }}/create">Создать курс</a>
   {% for course in courses %}
     <div>
+        <a href="/course/report/{{ course[0].id }}">Скачать отчет по посещаемости</a>
       <h4><a href="/course/update/{{course[0].id}}">{{ course[0].name }}</a></h4>
       <p>Занятия внутри курса</p>
       <a class="create course__a-create-lesson" href="/lesson/{{ course[0].id }}/create"> Добавить занятие </a>

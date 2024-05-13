@@ -22,8 +22,7 @@ def start_cap():
             students.append(Student.query.filter_by(id=lesson_student.student_id).first())
         cap_data = []
         for student in students:
-            cap_data.append([student.image_url, student.fio])
-
+            cap_data.append([student.image_url, student.id])
         cap = CameraCapturing(0, cap_data)
     cap.start()
     return jsonify({"message": "Zaebis"})
@@ -31,9 +30,10 @@ def start_cap():
 @app.route('/stop_capture', methods=["POST"])
 def stop_cap():
     global cap
-    students = cap.stop_capturing()
+    students_id = cap.stop_capturing()
     cap = None
-    return jsonify({"students": students})
+    students_fio = [Student.query.filter_by(id=stud_id).first().fio for stud_id in students_id if stud_id != "Неопознаный студент"]
+    return jsonify({"studentsId": students_id, "students":students_fio})
 
 @app.route('/login/', methods=["get", "post"])
 def login():

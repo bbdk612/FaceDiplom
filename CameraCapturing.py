@@ -1,8 +1,7 @@
-import urllib.request
-
 import cv2
 import face_recognition
 import threading
+import urllib
 
 class CameraCapturing:
 
@@ -10,7 +9,7 @@ class CameraCapturing:
         self.cap = cv2.VideoCapture(camera_url, cv2.CAP_V4L2)
         self.face_locations = []
         self.face_encodings = []
-        self.face_names = []
+        self.face_names = set()
         self.know_image_encodings = []
         self.know_image_names = []
         self.capturing = False
@@ -34,7 +33,6 @@ class CameraCapturing:
                 face_locations = face_recognition.face_locations(frame)
                 face_encodings = face_recognition.face_encodings(frame, face_locations)
                 name = ""
-                face_names = []
                 for face_encoding in face_encodings:
                     # See if the face is a match for the known face(s)
                     matches = face_recognition.compare_faces(self.know_image_encodings, face_encoding)
@@ -45,12 +43,11 @@ class CameraCapturing:
                         first_match_index = matches.index(True)
                         name = self.know_image_names[first_match_index]
 
-                    face_names.append(name)
-                self.face_names = face_names
+                    self.face_names.add(name)
 
         self.cap.release()
     
     def stop_capturing(self):
         self.capturing = False
-        return self.face_names
-        
+        return list(self.face_names)
+

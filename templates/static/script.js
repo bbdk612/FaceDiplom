@@ -1,5 +1,4 @@
 $(document).ready(() => {
-  // console.log($("input[id='lesson_id']").val())
   $(".start-capture").click(() => {
     $.ajax({
       method: "POST",
@@ -24,9 +23,7 @@ $(document).ready(() => {
 
       success: (data) => {
         alert("сбор данных успешно oстановлен");
-        console.log(data);
         data = JSON.parse(data);
-        console.log(data);
         htmlStr = "";
         data.students.forEach((element) => {
           htmlStr += `<li>${element}</li>`;
@@ -41,9 +38,11 @@ $(document).ready(() => {
           method: "POST",
           dataType: "html",
           url: `/student/check/${$("input[id='lesson_id']").val()}`,
-          data: data,
+          data: {
+            students: data.studentsId.join(";"),
+          },
           success: () => {
-            window.location.replace("/");
+            // window.location.replace('/')
           },
         });
       },

@@ -160,7 +160,7 @@ class Course(db.Model):
     def update(course_id, new_name):
         course = Course.query.filter_by(id=course_id).first()
         check = Course.query.filter_by(id=new_name).first()
-        if not check:
+        if not check or course.id == check.id:
             course.name = new_name
             db.session.commit()
             return {"id": course.id, "message": "Курс успешно создан"}
@@ -243,11 +243,10 @@ class Lesson_Student(db.Model):
     def __init__(self, student_id, lesson_id):
         self.student_id = student_id
         self.lesson_id = lesson_id
+        self.checked = False
     
-    @staticmethod
-    def set_checked(student_id, lesson_id):
-        ls = Lesson_Student.query.filter_by(student_id=student_id, lesson_id=lesson_id).first()
-        ls.checked = True
+    def set_checked(self):
+        self.checked = True
         db.session.commit()
     
     @staticmethod 

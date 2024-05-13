@@ -7,6 +7,7 @@ app = Flask(__name__, template_folder="../templates", static_folder="../template
 app.debug = True
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite" # Сюда пихай url до базы данных
 app.config["SECRET_KEY"] = "abc" # Ключ нормальный надо
+app.config['JSON_AS_ASCII'] = False
 
 
 login_manager = LoginManager()
