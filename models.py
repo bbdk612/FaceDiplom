@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash,  check_password_hash
 from flask_login import UserMixin, login_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from core import app
-#TODO создание админа
 
 db = SQLAlchemy(app)
 
@@ -87,9 +86,10 @@ class Student(db.Model):
         db.session.commit()
 
     @staticmethod 
-    def update(id, new_fio):
-        student = Student.query.filter_by(id=id).first()
-        student.fio = new_fio
+    def update(id, student):
+        stud = Student.query.filter_by(id=id).first()
+        stud.fio = student.fio
+        stud.image_url = student.image_url
         db.session.commit()
 
 class Auditory(db.Model):

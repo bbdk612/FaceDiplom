@@ -1,5 +1,5 @@
 # core/__init__.py
-# Тута короче инициализация всего проекта
+# Тут инициализация всего проекта
 from flask import Flask
 from flask_login import LoginManager
 
@@ -13,6 +13,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 import models
-import server
+import views
 import admin_views
 import user_views

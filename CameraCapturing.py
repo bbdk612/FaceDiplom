@@ -1,3 +1,5 @@
+import urllib.request
+
 import cv2
 import face_recognition
 import threading
@@ -13,7 +15,8 @@ class CameraCapturing:
         self.know_image_names = []
         self.capturing = False
         for student_image_path_name in student_images_path_name:
-            image = face_recognition.load_image_file(student_image_path_name[0])
+            response = urllib.request.urlopen(student_image_path_name[0])
+            image = face_recognition.load_image_file(response)
             face_encoding = face_recognition.face_encodings(image)[0]
             self.know_image_encodings.append(face_encoding)
             self.know_image_names.append(student_image_path_name[1])
@@ -35,7 +38,7 @@ class CameraCapturing:
                 for face_encoding in face_encodings:
                     # See if the face is a match for the known face(s)
                     matches = face_recognition.compare_faces(self.know_image_encodings, face_encoding)
-                    name = "Unknown"
+                    name = "Неопознаный студент"
 
                     # # If a match was found in known_face_encodings, just use the first one.
                     if True in matches:
@@ -49,5 +52,5 @@ class CameraCapturing:
     
     def stop_capturing(self):
         self.capturing = False
-        return list(self.face_names)
+        return self.face_names
         

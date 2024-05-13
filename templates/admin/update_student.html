@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% from "macroces/field_macro.html" import render_field_data, render_field %}
+
+{% block content %}
+	<form method="POST" action="">
+        {{ render_field_data(form.fio, student.fio) }}
+        {{ render_field_data(form.image_url, student.image_url) }}
+        {{ render_field(form.submit) }}
+    </form>
+{% endblock %}

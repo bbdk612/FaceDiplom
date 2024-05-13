@@ -96,6 +96,18 @@ def init_admin_routes():
 
         return render_template("admin/make_student.html", form=form)
 
+    @app.route('/student/update/<student_id>', methods=["GET", "POST"])
+    @login_required
+    def update_student(student_id):
+        form = MakeStudentForm(request.form)
+        if request.method == "POST" and form.validate():
+            stud = Student(fio=form.fio.data, image_url=form.image_url.data)
+            Student.update(id=student_id, student=stud)
+            return redirect("/admin")
+
+        student = Student.query.filter_by(id=student_id).first()
+        return render_template("admin/update_student.html", form=form, student=student)
+
     @app.route("/auditory/create", methods=["GET", "POST"])
     @login_required
     def create_auditory():

@@ -40,11 +40,11 @@ def user_views_init():
 
             lessons = Lesson.query.filter_by(course_id=course_id).all()
             for lesson in lessons:
-                ls = Lesson_Student.query.filter_by(lesson_id=lesson.id).all()
+                lss = Lesson_Student.query.filter_by(lesson_id=lesson.id).all()
                 for ls in lss:
                     Lesson_Student.delete(ls)
 
-            Course.update(course_id=course_id, new_name=form.name.data)
+            course_data = Course.update(course_id=course_id, new_name=form.name.data)
             if course_data["id"] == -1:
                 flash(course_data["message"])
             else:
@@ -108,4 +108,10 @@ def user_views_init():
         date = datetime.now()
         lesson = Lesson.query.filter_by(id=lesson_id).first()
         lesson.set_date(date)
-        return render_template("index.html")
+        return render_template("index.html", lesson_id=lesson_id)
+
+    @app.route("/student/check/<lesson_id>", methods=["POST"])
+    @login_required
+    def student_check(lesson_id):
+        print(request.form["students"])
+        return jsonify({"123": "123"}), 200

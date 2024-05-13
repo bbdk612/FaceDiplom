@@ -1,9 +1,13 @@
 $(document).ready(() => {
+  // console.log($("input[id='lesson_id']").val())
   $(".start-capture").click(() => {
     $.ajax({
       method: "POST",
       url: "/start_capture",
-      dataType: "json",
+      dataType: "html",
+      data: {
+        lesson_id: $("input[id='lesson_id']").val(),
+      },
       success: () => {
         alert("сбор данных успешно запущен");
       },
@@ -16,9 +20,12 @@ $(document).ready(() => {
     $.ajax({
       method: "POST",
       url: "/stop_capture",
-      dataType: "json",
+      dataType: "html",
+
       success: (data) => {
         alert("сбор данных успешно oстановлен");
+        console.log(data);
+        data = JSON.parse(data);
         console.log(data);
         htmlStr = "";
         data.students.forEach((element) => {
@@ -30,6 +37,15 @@ $(document).ready(() => {
           ${htmlStr}
           </ul>
           `);
+        $.ajax({
+          method: "POST",
+          dataType: "html",
+          url: `/student/check/${$("input[id='lesson_id']").val()}`,
+          data: data,
+          success: () => {
+            window.location.replace("/");
+          },
+        });
       },
       error: (xhr, status, error) => {
         alert(xhr.responseText);

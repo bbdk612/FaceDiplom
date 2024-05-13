@@ -19,7 +19,7 @@
 <ul class="{{ data_class }}_list">
   {% for d in data %}
   <li id="{{ data_class }}_{{d.id}}" class="{{ data_class }}_item">
-    <span>{{ d.fio }}</span>
+    <a href="/student/update/{{ d.id }}" >{{ d.fio }}</a>
     <span>
       <button
         type="button"
