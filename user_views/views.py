@@ -71,7 +71,11 @@ def user_views_init():
         course_students = Course_Student.query.filter_by(course_id=course_id).all()
         students = []
         for student in course_students:
-            students.append(Student.query.filter_by(id=student.student_id).first())
+            student = Student.query.filter_by(id=student.student_id).first()
+            if student:
+                students.append(student)
+            else:
+                return redirect("/")
         students.sort(key=lambda x: x.fio)
         lessons = Lesson.query.filter_by(course_id=course_id).filter(Lesson.datetime).order_by().all()
         lesson_dates = [""] + [lesson.datetime.strftime("%d.%m.%Y") for lesson in lessons]
