@@ -3,46 +3,46 @@
 {% from "macroces/datalist_macro.html" import render_user_data, render_student_data, render_auditory_data %}
 
 {% block content %}
-{% if messages %}
-  {% for message in messages %}
-    <p>{{ message }}</p>
-  {% endfor %} 
-{% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 
 
-<h1>ADMIN</h1>
+    <h1>ADMIN</h1>
 
-<div>
-  <div>
-    <h2>Преподаватели</h2>
     <button class="logout">Выйти</button>
-    <a class="user-load" href="/user/create" type=button>Создать</a>
-  </div>
-  {{ render_user_data(users, user_class) }}
-</div>
-<div>
-  <div>
-    <h2>Администраторы</h2>
-    <a class="admin-load" href="/admin/create" type=button>Cоздать</a>
-  </div>
-  {{ render_user_data(admins, user_class) }}
-</div>
-<div>
-  <div>
-    <h2>Студенты</h2>
-    <a class="student-load" href="/student/create" type=button>Cоздать</a>
-  </div>
-  {{ render_student_data(students, student_class) }}
-</div>
-<div>
-  <div>
-    <h2>Аудитории</h2>
-    <a class="auditory-load" href="/auditory/create" type=button>Cоздать</a>
-  </div>
-  {{ render_auditory_data(auditories, auditory_class) }}
-</div>
+    <div>
+        <div>
+            <h2>Преподаватели</h2>
+            <a class="user-load" href="/user/create" type=button>Создать</a>
+        </div>
+        {{ render_user_data(users, user_class) }}
+    </div>
+    <div>
+        <div>
+            <h2>Администраторы</h2>
+            <a class="admin-load" href="/admin/create" type=button>Cоздать</a>
+        </div>
+        {{ render_user_data(admins, user_class) }}
+    </div>
+    <div>
+        <div>
+            <h2>Студенты</h2>
+            <a class="student-load" href="/student/create" type=button>Cоздать</a>
+        </div>
+        {{ render_student_data(students, student_class) }}
+    </div>
+    <div>
+        <div>
+            <h2>Аудитории</h2>
+            <a class="auditory-load" href="/auditory/create" type=button>Cоздать</a>
+        </div>
+        {{ render_auditory_data(auditories, auditory_class) }}
+    </div>
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='admin.index.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin.index.js') }}"></script>
 {% endblock %}

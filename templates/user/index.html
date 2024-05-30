@@ -1,32 +1,36 @@
 {% extends "base.html" %} {% block content %}
-<h1>USER</h1>
+    <h1>USER</h1>
 
-<div>
-  <h2>Ваши Курсы</h2>
-  <a href="/course/{{ user_id }}/create">Создать курс</a>
-  {% for course in courses %}
     <div>
-        <a href="/course/report/{{ course[0].id }}">Скачать отчет по посещаемости</a>
-      <h4><a href="/course/update/{{course[0].id}}">{{ course[0].name }}</a></h4>
-      <p>Занятия внутри курса</p>
-      <a class="create course__a-create-lesson" href="/lesson/{{ course[0].id }}/create"> Добавить занятие </a>
-      <button class="course__button-delete delete">Удалить курс</button>
-      <ul>
-        {% for lesson in course[1] %}
-          <li id="lesson_{{ lesson.id }}">
-            <a class="update lesson__a-update" href="/lesson/{{ course[0].id }}/update/{{ lesson.id }}" >{{lesson.theme}}</a>
-            <a href="/lesson/start/{{ lesson.id }}">Начать занятие</a>
-            <button id="{{ lesson.id }}" class="lesson__button-delete delete">Удалить</button>
-          </li>
+        <h2>Ваши Курсы</h2>
+        <a href="/course/{{ user_id }}/create">Создать курс</a>
+        {% for course in courses %}
+            <div>
+                <a href="/course/report/{{ course[0].id }}">Скачать отчет по посещаемости</a>
+                <h4><a href="/course/update/{{ course[0].id }}">{{ course[0].name }}</a></h4>
+                <p>Занятия внутри курса</p>
+                <a class="create course__a-create-lesson" href="/lesson/{{ course[0].id }}/create"> Добавить
+                    занятие </a>
+                <button class="course__button-delete delete">Удалить курс</button>
+                <ul>
+                    {% for lesson in course[1] %}
+                        <li id="lesson_{{ lesson.id }}">
+                            <a class="update lesson__a-update"
+                               href="/lesson/{{ course[0].id }}/update/{{ lesson.id }}">{{ lesson.theme }}</a>
+                            {% if not lesson.completed %}
+                                <a href="/lesson/start/{{ lesson.id }}">Начать занятие</a>
+                            {% endif %}
+                            <button id="{{ lesson.id }}" class="lesson__button-delete delete">Удалить</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         {% endfor %}
-      </ul>
     </div>
-  {% endfor %}
-</div>
 
-{% endblock%}
+{% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='user.index.js') }}"></script>
+    <script src="{{ url_for('static', filename='user.index.js') }}"></script>
 {% endblock %}
 

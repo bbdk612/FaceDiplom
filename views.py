@@ -1,22 +1,24 @@
-from flask import render_template,  jsonify, redirect, request
+from flask import render_template,  jsonify, redirect, request, url_for
 from flask_login import current_user, login_required, logout_user
 from CameraCapturing import CameraCapturing
 from core import app, login_manager
 from forms.LoginForm import LoginForm
 from models import *
 
+cap = None
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
 
-cap = None
-@app.route('/start_capture', methods=["POST"])
-def start_cap():
+@app.route('/start_capture/<int:lesson_id>', methods=["POST"])
+@login_required
+def start_cap(lesson_id):
     global cap
     if cap is None:
         # auditory_id = Lesson.query.filter_by(id=request.form['lesson_id']).first().auditory_id
         # camera_url = Auditory.query.filter_by(id=auditory_id).first().camera_address
-        lesson_students = Lesson_Student.query.filter_by(lesson_id=request.form['lesson_id']).all()
+        lesson_students = Lesson_Student.query.filter_by(lesson_id=lesson_id).all()
         students = []
         for lesson_student in lesson_students:
             students.append(Student.query.filter_by(id=lesson_student.student_id).first())
@@ -24,16 +26,41 @@ def start_cap():
         for student in students:
             cap_data.append([student.image_url, student.id])
         cap = CameraCapturing(0, cap_data)
-    cap.start()
-    return jsonify({"message": "Zaebis"})
+        cap.start()
+        return jsonify({"message": "Zaebis"})
 
-@app.route('/stop_capture', methods=["POST"])
-def stop_cap():
+@app.route('/stop_capture/<int:lesson_id>', methods=["POST"])
+@login_required
+def stop_cap(lesson_id):
     global cap
-    students_id = cap.stop_capturing()
+    students_ids_faces = cap.stop_capturing()
     cap = None
-    students_fio = [Student.query.filter_by(id=stud_id).first().fio for stud_id in students_id if stud_id != "Неопознаный студент"]
-    return jsonify({"studentsId": students_id, "students":students_fio})
+    students_data = []
+    for student_id_face in students_ids_faces:
+        if student_id_face["id"] >= 0:
+            student_data = {
+                "id": student_id_face["id"],
+                "name": Lesson_Student.query.filter_by(student_id=student_id_face["id"], lesson_id=lesson_id).first().student.fio,
+                "faceUrl": url_for('static', filename=student_id_face["faceFile"])
+            }
+        else:
+            student_data = {
+                "id": student_id_face["id"],
+                "name": f"Неизвестный №{abs(student_id_face['id'])}",
+                "faceUrl": url_for('static', filename=student_id_face["faceFile"])
+            }
+        print(student_data)
+        students_data.append(student_data)
+    students_model = Lesson_Student.query.filter_by(lesson_id=lesson_id).all()
+    students = []
+    for student_model in students_model:
+        student_data = {
+            "id": student_model.student.id,
+            "name": student_model.student.fio,
+        }
+        print(student_data)
+        students.append(student_data)
+    return jsonify({"responsed": students_data, "all": students})
 
 @app.route('/login/', methods=["get", "post"])
 def login():

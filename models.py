@@ -198,6 +198,7 @@ class Lesson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     theme = db.Column(db.String(150), nullable=False)
     datetime = db.Column(db.DateTime, nullable=True)
+    completed = db.Column(db.Boolean, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey("course.id"))
     auditory_id = db.Column(db.Integer, db.ForeignKey("auditory.id"))
 
@@ -209,9 +210,11 @@ class Lesson(db.Model):
         self.theme = theme
         self.course_id = course_id
         self.auditory_id = auditory_id
+        self.completed = False
 
     def set_date(self, date):
         self.datetime = date
+        self.completed = True
         db.session.commit()
 
     @staticmethod 

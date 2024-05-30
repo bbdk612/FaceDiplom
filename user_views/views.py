@@ -156,4 +156,7 @@ def user_views_init():
             student = Student.query.filter_by(id=ls.student_id).first()
             if str(student.id) in students_ids:
                 ls.set_checked()
+
+        lesson = Lesson.query.filter_by(id=lesson_id).first()
+        lesson.set_date(datetime.now())
         return jsonify({"123": "123"}), 200

@@ -1,14 +1,27 @@
 {% extends "base.html" %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">
+{% endblock %}
+
 {% block content %}
-<input type="hidden" id="lesson_id" value="{{ lesson_id }}">
-<div class="capture-buttons">
-  <button class="start-capture">Начать отметку</button>
-  <button class="stop-capture">Закончить отметку</button>
-</div>
-<div class="students-on-lesson"></div>
+    <div class="loader_container">
+        <div class="loader"></div>
+    </div>
+    <input type="hidden" id="lesson_id" value="{{ lesson_id }}">
+    <div class="capture-buttons">
+        <button class="start-capture">Начать отметку</button>
+        <button class="stop-capture">Закончить отметку</button>
+    </div>
+    <div class="students-on-lesson"></div>
+    <div class="save-checks">
+        <button id="save">
+            Сохранить отметки
+        </button>
+    </div>
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

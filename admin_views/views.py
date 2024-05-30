@@ -67,7 +67,7 @@ def init_admin_routes():
         return render_template("admin/make_user.html", form=form, messages=messages)
 
     @app.route("/admin/create", methods=["GET", "POST"])
-    # @login_required
+    @login_required
     def admin_create():
         form = MakeUserForm(request.form)
         if request.method == "POST" and form.validate():
