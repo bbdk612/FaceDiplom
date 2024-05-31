@@ -80,7 +80,7 @@ $(document).ready(() => {
     $("button#save").click(() => {
         students = []
         $(".finded-student").each((i, el) => {
-            if( $(el).val()) {
+            if( +$(el).val() > 0)  {
                 students.push($(el).val())
             }
         })
