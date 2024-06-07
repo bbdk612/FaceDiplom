@@ -5,4 +5,4 @@ class LoginForm(Form):
     login = StringField("Логин", validators=[DataRequired()])
     password = PasswordField("Пароль", validators=[DataRequired()])
     remember_me = BooleanField("Запомнить меня")
-    submit = SubmitField("Войти")
+    submit = SubmitField("Войти", render_kw={'class': "btn btn-primary"})

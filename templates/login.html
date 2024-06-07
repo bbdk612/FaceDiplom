@@ -1,13 +1,20 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% from "macroces/field_macro.html" import render_field %}
 
 {% block content %}
-<form action="" method="post">
-  {{ form.csrf_tocken }}
-  {{ render_field(form.login) }}
-  {{ render_field(form.password) }} 
-  {{ render_field(form.remember_me) }}
-  <div class="form-submit">{{ form.submit }}</div>
-</form>
+    <div class="form-container">
+        <h2>Войти</h2>
+        <form action="" method="post">
+            {{ form.csrf_token }}
+            {{ render_field(form.login) }}
+            {{ render_field(form.password) }}
+            <div class="form-check">{{ render_field(form.remember_me) }}</div>
+            <div class="form-submit">{{ form.submit }}</div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 {% endblock %}

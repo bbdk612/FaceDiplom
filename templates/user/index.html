@@ -19,6 +19,8 @@
                                href="/lesson/{{ course[0].id }}/update/{{ lesson.id }}">{{ lesson.theme }}</a>
                             {% if not lesson.completed %}
                                 <a href="/lesson/start/{{ lesson.id }}">Начать занятие</a>
+                            {% else %}
+                                <a href="/lesson/check_edit/{{ lesson.id }}">Изменить отметки</a>
                             {% endif %}
                             <button id="{{ lesson.id }}" class="lesson__button-delete delete">Удалить</button>
                         </li>

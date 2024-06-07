@@ -1,12 +1,35 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% from "macroces/field_macro.html" import render_field %} 
+{% from "macroces/field_macro.html" import render_field, render_field_data %}
+
+{% block header %}
+    <div class="container">
+        <div class="header-data">
+            <div class="header-name">
+                <a href="/"> <i class="bi bi-arrow-bar-left"></i> Назад</a>
+            </div>
+            <nav class="header-nav">
+                <a class="btn btn-secondary logout" href="/logout"><i class="bi bi-box-arrow-right"></i></a>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
 
 {% block content %}
-<form action="" method="POST">
-  {{ form.csrf_tocken }} 
-  {{ render_field(form.fio) }} 
-  {{ render_field(form.image_url) }} 
-  {{ render_field(form.submit) }}
-</form>
+    <div class="form-container">
+        <form action="" method="POST">
+            {{ form.csrf_token }}
+            {{ render_field(form.fio) }}
+            {{ render_field(form.image_url) }}
+            {{ render_field_data(form.submit, "Создать") }}
+        </form>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
 {% endblock %}

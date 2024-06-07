@@ -2,47 +2,70 @@
 
 {% from "macroces/datalist_macro.html" import render_user_data, render_student_data, render_auditory_data %}
 
+{% block header %}
+    <div class="container">
+        <div class="header-data">
+            <div class="header-name">
+                <h1>Здравствуйте, {{ current_user.fio }}</h1>
+            </div>
+            <nav class="header-nav">
+                <button class="btn btn-secondary logout"><i class="bi bi-box-arrow-right"></i></button>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
     {% if messages %}
         {% for message in messages %}
             <p>{{ message }}</p>
         {% endfor %}
     {% endif %}
-
-
-    <h1>ADMIN</h1>
-
-    <button class="logout">Выйти</button>
-    <div>
-        <div>
-            <h2>Преподаватели</h2>
-            <a class="user-load" href="/user/create" type=button>Создать</a>
+    <div class="container">
+        <div class="user-list">
+            <div class="user-tools">
+                <h2>Преподаватели</h2>
+                <div class="tools-buttons">
+                    <a class="user-load btn btn-secondary" href="/user/create">Создать</a>
+                </div>
+            </div>
+            {{ render_user_data(users, user_class) }}
         </div>
-        {{ render_user_data(users, user_class) }}
-    </div>
-    <div>
-        <div>
-            <h2>Администраторы</h2>
-            <a class="admin-load" href="/admin/create" type=button>Cоздать</a>
+        <div class="admin-list">
+            <div class="admin-tools">
+                <h2>Администраторы</h2>
+                <div class="tools-buttons">
+                    <a class="admin-load btn btn-secondary" href="/admin/create" type=button>Cоздать</a>
+                </div>
+            </div>
+            {{ render_user_data(admins, user_class) }}
         </div>
-        {{ render_user_data(admins, user_class) }}
-    </div>
-    <div>
-        <div>
-            <h2>Студенты</h2>
-            <a class="student-load" href="/student/create" type=button>Cоздать</a>
+        <div class="student-list">
+            <div class="student-tools">
+                <h2>Студенты</h2>
+                <div class="tools-buttons">
+                    <a class="student-load btn btn-secondary" href="/student/create">Cоздать</a>
+                </div>
+            </div>
+            {{ render_student_data(students, student_class) }}
         </div>
-        {{ render_student_data(students, student_class) }}
-    </div>
-    <div>
-        <div>
-            <h2>Аудитории</h2>
-            <a class="auditory-load" href="/auditory/create" type=button>Cоздать</a>
+        <div class="auditory-list">
+            <div class="auditory-tools">
+                <h2>Аудитории</h2>
+                <div class="tools-buttons">
+                    <a class="auditory-load btn btn-secondary" href="/auditory/create">Cоздать</a>
+                </div>
+            </div>
+            {{ render_auditory_data(auditories, auditory_class) }}
         </div>
-        {{ render_auditory_data(auditories, auditory_class) }}
     </div>
 {% endblock %}
 
 {% block script %}
     <script src="{{ url_for('static', filename='admin.index.js') }}"></script>
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}

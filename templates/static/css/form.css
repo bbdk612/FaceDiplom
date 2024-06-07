@@ -1,0 +1,32 @@
+.form-container {
+    max-width: 700px;
+    display: flex;
+    background: white;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-check {
+    padding: 0;
+}
+
+.form-check .form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

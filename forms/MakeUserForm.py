@@ -7,4 +7,4 @@ class MakeUserForm(Form):
     login = StringField("Логин", validators=[InputRequired()])
     password = PasswordField("Пароль", validators=[InputRequired(), EqualTo('confirm', message="Пароли должны совпадать")])
     confirm = PasswordField("Подтвердите пароль")
-    submit = SubmitField()
+    submit = SubmitField(label="")

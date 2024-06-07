@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% from 'macroces/check_macro.html' import check_student %}
+{% block content %}
+    <h1>Студенты зачисленные на знятие</h1>
+    <div class="students-on-lesson">
+        {% for student in lesson_students %}{{ check_student(student.student, lesson_students.check) }}{% endfor %}
+    </div>
+{% endblock %}

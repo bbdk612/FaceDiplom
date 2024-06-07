@@ -2,10 +2,34 @@
 
 {% from "macroces/field_macro.html" import render_field_data, render_field %}
 
+{% block header %}
+    <div class="container">
+        <div class="header-data">
+            <div class="header-name">
+                <a href="/admin"> <i class="bi bi-arrow-bar-left"></i> Назад</a>
+            </div>
+            <nav class="header-nav">
+                <a class="btn btn-secondary logout" href="/logout"><i class="bi bi-box-arrow-right"></i></a>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
+    <div class="form-container">
 	<form method="POST" action="">
+        {{ form.csrf_token }}
         {{ render_field_data(form.fio, student.fio) }}
         {{ render_field_data(form.image_url, student.image_url) }}
-        {{ render_field(form.submit) }}
+        {{ render_field_data(form.submit, "Обновить") }}
     </form>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
 {% endblock %}
