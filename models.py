@@ -253,7 +253,10 @@ class Lesson_Student(db.Model):
     def set_checked(self):
         self.checked = True
         db.session.commit()
-    
+
+    def set_unchecked(self):
+        self.checked = False
+        db.session.commit()
     @staticmethod 
     def create(ls):
         db.session.add(ls)

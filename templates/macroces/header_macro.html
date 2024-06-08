@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% macro edit_header() %}
+    <div class="container">
+        <div class="header-data">
+            <div class="header-name">
+                <a href="/"> <i class="bi bi-arrow-bar-left"></i> Назад</a>
+            </div>
+            <nav class="header-nav">
+                <button class="btn btn-secondary logout"><i class="bi bi-box-arrow-right"></i></button>
+            </nav>
+        </div>
+    </div>
+{% endmacro %}
 
-</body>
-</html>
+{% macro index_header(user) %}
+    <div class="container">
+        <div class="header-data">
+            <div class="header-name">
+                <h1>Здравствуйте, {{ user.fio }}</h1>
+            </div>
+            <nav class="header-nav">
+                <button class="btn btn-secondary logout"><i class="bi bi-box-arrow-right"></i></button>
+            </nav>
+        </div>
+    </div>
+{% endmacro %}

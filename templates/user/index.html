@@ -1,28 +1,39 @@
-{% extends "base.html" %} {% block content %}
-    <h1>USER</h1>
-    <button class="logout">Выйти</button>
-    <div>
-        <h2>Ваши Курсы</h2>
-        <a href="/course/{{ user_id }}/create">Создать курс</a>
+{% extends "base.html" %}
+
+{% from 'macroces/header_macro.html' import index_header %}
+
+{% block header %}
+    {{ index_header(current_user) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="courses-tools">
+            <h2>Ваши Курсы</h2>
+            <a class="btn btn-secondary" href="/course/{{ user_id }}/create">Создать курс</a>
+        </div>
         {% for course in courses %}
             <div>
-                <a href="/course/report/{{ course[0].id }}">Скачать отчет по посещаемости</a>
-                <h4><a href="/course/update/{{ course[0].id }}">{{ course[0].name }}</a></h4>
-                <p>Занятия внутри курса</p>
-                <a class="create course__a-create-lesson" href="/lesson/{{ course[0].id }}/create"> Добавить
-                    занятие </a>
-                <button class="course__button-delete delete">Удалить курс</button>
+                <div class="course-tools">
+                    <h4><a href="/course/update/{{ course[0].id }}">{{ course[0].name }}</a></h4>
+                    <a class="create course__a-create-lesson btn btn-secondary"
+                       href="/lesson/{{ course[0].id }}/create"> Добавить занятие </a>
+                    <a class="btn btn-primary" href="/course/report/{{ course[0].id }}">Скачать отчет по
+                        посещаемости</a>
+                    <button class="course__button-delete delete btn btn-danger">Удалить курс</button>
+                </div>
                 <ul>
                     {% for lesson in course[1] %}
-                        <li id="lesson_{{ lesson.id }}">
+                        <li id="lesson_{{ lesson.id }}" class="lesson_item">
                             <a class="update lesson__a-update"
                                href="/lesson/{{ course[0].id }}/update/{{ lesson.id }}">{{ lesson.theme }}</a>
                             {% if not lesson.completed %}
-                                <a href="/lesson/start/{{ lesson.id }}">Начать занятие</a>
+                                <a class="btn btn-primary btn-sm" href="/lesson/start/{{ lesson.id }}">Начать занятие</a>
                             {% else %}
-                                <a href="/lesson/check_edit/{{ lesson.id }}">Изменить отметки</a>
+                                <a class="btn btn-primary btn-sm" href="/lesson/check_edit/{{ lesson.id }}">Изменить отметки</a>
                             {% endif %}
-                            <button id="{{ lesson.id }}" class="lesson__button-delete delete">Удалить</button>
+                            <button id="{{ lesson.id }}" class="lesson__button-delete delete btn btn-danger btn-sm">Удалить
+                            </button>
                         </li>
                     {% endfor %}
                 </ul>
@@ -30,6 +41,10 @@
         {% endfor %}
     </div>
 
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block script %}

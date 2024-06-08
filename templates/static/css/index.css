@@ -12,9 +12,14 @@ div[class$="-tools"] {
 li[class$="_item"] {
     width: 80%;
     height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 150px;
     font-size: 1.6em;
+    padding-top: 10px;
+}
+
+.lesson_item {
+    display: grid !important;
+    grid-template-columns: 1fr 150px 100px !important;
+    gap: 10px
 }

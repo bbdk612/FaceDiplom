@@ -1,18 +1,10 @@
 {% extends "base.html" %}
 
-{% from "macroces/datalist_macro.html" import render_user_data, render_student_data, render_auditory_data %}
+{% from "macroces/datalist_macro.html" import render_user_data, render_auditory_data, render_student_data%}
+{% from "macroces/header_macro.html" import index_header %}
 
 {% block header %}
-    <div class="container">
-        <div class="header-data">
-            <div class="header-name">
-                <h1>Здравствуйте, {{ current_user.fio }}</h1>
-            </div>
-            <nav class="header-nav">
-                <button class="btn btn-secondary logout"><i class="bi bi-box-arrow-right"></i></button>
-            </nav>
-        </div>
-    </div>
+    {{ index_header(current_user) }}
 {% endblock %}
 
 {% block content %}
@@ -26,7 +18,7 @@
             <div class="user-tools">
                 <h2>Преподаватели</h2>
                 <div class="tools-buttons">
-                    <a class="user-load btn btn-secondary" href="/user/create">Создать</a>
+                    <a class="user-load btn btn-secondary btn-sm" href="/user/create">Создать</a>
                 </div>
             </div>
             {{ render_user_data(users, user_class) }}
@@ -35,7 +27,7 @@
             <div class="admin-tools">
                 <h2>Администраторы</h2>
                 <div class="tools-buttons">
-                    <a class="admin-load btn btn-secondary" href="/admin/create" type=button>Cоздать</a>
+                    <a class="admin-load btn btn-secondary btn-sm" href="/admin/create" type=button>Cоздать</a>
                 </div>
             </div>
             {{ render_user_data(admins, user_class) }}
@@ -44,7 +36,7 @@
             <div class="student-tools">
                 <h2>Студенты</h2>
                 <div class="tools-buttons">
-                    <a class="student-load btn btn-secondary" href="/student/create">Cоздать</a>
+                    <a class="student-load btn btn-secondary btn-sm" href="/student/create">Cоздать</a>
                 </div>
             </div>
             {{ render_student_data(students, student_class) }}
@@ -53,7 +45,7 @@
             <div class="auditory-tools">
                 <h2>Аудитории</h2>
                 <div class="tools-buttons">
-                    <a class="auditory-load btn btn-secondary" href="/auditory/create">Cоздать</a>
+                    <a class="auditory-load btn btn-secondary btn-sm" href="/auditory/create">Cоздать</a>
                 </div>
             </div>
             {{ render_auditory_data(auditories, auditory_class) }}

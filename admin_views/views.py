@@ -21,7 +21,7 @@ def init_admin_routes():
                                student_class="student", 
                                students=students,
                                auditories=auditories,
-                               auditory_class="auditory"
+                               auditory_class="auditory",
                                )
     
     @app.route("/user/delete/<user_id>", methods=["POST"])

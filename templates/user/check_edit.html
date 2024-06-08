@@ -1,8 +1,28 @@
 {% extends "base.html" %}
 {% from 'macroces/check_macro.html' import check_student %}
+
+{% from 'macroces/header_macro.html' import edit_header %}
+
+{% block header %}
+    {{ edit_header() }}
+{% endblock %}
+
 {% block content %}
-    <h1>Студенты зачисленные на знятие</h1>
-    <div class="students-on-lesson">
-        {% for student in lesson_students %}{{ check_student(student.student, lesson_students.check) }}{% endfor %}
+    <div class="container">
+        <h1>Студенты зачисленные на знятие</h1>
+        <div class="students-on-lesson">
+            {% for student in lesson_students %}
+                {{ check_student(student, student.checked) }}
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary" id="save-data">Сохранить</button>
     </div>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/form.css") }}">
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='check-edit.js') }}"></script>
 {% endblock %}

@@ -188,9 +188,24 @@ def user_views_init():
     @app.route("/lesson/check_edit/<lesson_id>", methods=["GET", "POST"])
     @login_required
     def check_edit(lesson_id):
-        if request.method == "POST":
-            pass
-        pass
+        lesson_students = Lesson_Student.query.filter_by(lesson_id=lesson_id).all()
+        return render_template('user/check_edit.html', lesson_students=lesson_students)
+
+
+    @app.route('/lesson/student/<sl_id>/check', methods=["POST"])
+    @login_required
+    def check_student(sl_id):
+        lesson = Lesson_Student.query.filter_by(id=sl_id).first()
+        lesson.set_checked()
+        return jsonify({"message": "ok"})
+
+    @app.route('/lesson/student/<sl_id>/uncheck', methods=["POST"])
+    @login_required
+    def uncheck_student(sl_id):
+        lesson = Lesson_Student.query.filter_by(id=sl_id).first()
+        lesson.set_unchecked()
+
+        return jsonify({"message": "ok"})
 
     @app.route("/student/check/<lesson_id>", methods=["POST"])
     @login_required

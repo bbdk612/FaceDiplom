@@ -2,17 +2,10 @@
 
 {% from "macroces/field_macro.html" import render_field_data, render_field %}
 
+{% from 'macroces/header_macro.html' import edit_header %}
+
 {% block header %}
-    <div class="container">
-        <div class="header-data">
-            <div class="header-name">
-                <a href="/"> <i class="bi bi-arrow-bar-left"></i> Назад</a>
-            </div>
-            <nav class="header-nav">
-                <a class="btn btn-secondary logout" href="/logout"><i class="bi bi-box-arrow-right"></i></a>
-            </nav>
-        </div>
-    </div>
+    {{ edit_header() }}
 {% endblock %}
 
 {% block content %}
