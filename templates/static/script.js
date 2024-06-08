@@ -45,7 +45,7 @@ $(document).ready(() => {
                 data.all.forEach((el) => {
                     unfindedStudentsHTML += `
                     <div class="unfinded-student" id="student_${el.id}">
-                        <input type="checkbox" id="${el.id}" name="${el.id}">
+                        <input type="checkbox" onchange="selectCheck()" id="${el.id}" name="${el.id}">
                         <label for="${el.id}">${el.name}</label>
                     </div>
                     `
@@ -117,10 +117,17 @@ function checkAll(target) {
 
 function selectChange(id) {
     $(`option`).show()
-    $('input[type="checkbox"]').show()
+    $(`div[id^="student_"]`).show()
     if ($(`option[value='${id}']:checked`)) {
         $(`option[value='${id}']:not(:checked)`).hide()
         $(`#student_${id}`).hide()
     }
 }
 
+function selectCheck(id) {
+    $(`option`).show()
+    $(`div[id^="student_"]`).show()
+    if ($(`div[id^="${id}"]:checked`)) {
+        $(`option[value='${id}']:not(:checked)`).hide()
+    }
+}
