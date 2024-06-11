@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% from "macroces/datalist_macro.html" import render_user_data, render_auditory_data, render_student_data%}
+{% from "macroces/datalist_macro.html" import render_user_data, render_auditory_data, render_student_data, render_group_data %}
 {% from "macroces/header_macro.html" import index_header %}
 
 {% block header %}
@@ -31,6 +31,15 @@
                 </div>
             </div>
             {{ render_user_data(admins, user_class) }}
+        </div>
+        <div class="group-list">
+            <div class="group-tools">
+                <h2>Группы</h2>
+                <div class="tools-buttons">
+                    <a class="group-load btn btn-secondary btn-sm" href="/group/create" type=button>Cоздать</a>
+                </div>
+            </div>
+            {{ render_group_data(groups ) }}
         </div>
         <div class="student-list">
             <div class="student-tools">

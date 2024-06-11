@@ -5,4 +5,5 @@ from wtforms.validators import InputRequired, DataRequired
 class MakeStudentForm(Form):
     fio = StringField("Ф.И.О.", validators=[InputRequired()])
     image_url = StringField("Ссылка на изборажение студента", validators=[DataRequired()])
+    group = StringField("Номер группы", validators=[DataRequired()])
     submit = SubmitField(label="")

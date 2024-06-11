@@ -22,6 +22,9 @@
         {% for d in data %}
             <li id="{{ data_class }}_{{ d.id }}" class="{{ data_class }}_item">
                 <a href="/student/update/{{ d.id }}">{{ d.fio }}</a>
+                <span class="group">
+                    {{ d.group.number }}
+                </span>
                 <span>
                     <button
                             type="button"
@@ -51,6 +54,26 @@
                     </button>
                 </span>
             </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% macro render_group_data(data) %}
+    <ul class="group_list">
+        {% for d in data %}
+            <li id="group_{{d.number}}" class="group_item">
+                <span>{{ d.number }}</span>
+                <span>
+                    <button
+                            type="button"
+                            class="group_button-delete btn btn-danger"
+                            id="{{ d.number }}"
+                    >
+                        Удалить
+                    </button>
+                </span>
+            </li>
+                {{ render_student_data(d.student, "student") }}</li>
         {% endfor %}
     </ul>
 {% endmacro %}

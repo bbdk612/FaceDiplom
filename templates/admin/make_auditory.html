@@ -14,8 +14,15 @@
     <div class="form-container">
         <form action="" method="POST">
             {{ form.csrf_token }}
-            {{ render_field(form.number) }}
-            {{ render_field(form.camera_address) }}
+
+            {% if auditory %}
+                {{ render_field_data(form.number, auditory.number) }}
+                {{ render_field_data(form.camera_address, auditory.camera_address) }}
+            {% else %}
+                {{ render_field(form.number) }}
+                {{ render_field(form.camera_address) }}
+            {% endif %}
+
             {{ render_field_data(form.submit, "Создать") }}
         </form>
     </div>

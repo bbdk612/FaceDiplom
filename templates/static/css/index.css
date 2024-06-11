@@ -23,3 +23,7 @@ li[class$="_item"] {
     grid-template-columns: 1fr 150px 100px !important;
     gap: 10px
 }
+.student_item {
+    grid-template-columns: 1fr 150px 100px !important;
+    gap: 10px
+}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %} 
+
+{% from 'macroces/field_macro.html' import render_field, render_field_data %} 
+
+{% from 'macroces/header_macro.html' import edit_header %} 
+
+{% block header %} 
+    {{ edit_header() }} 
+{% endblock %} 
+
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/form.css') }}"
+/>
+{% endblock %} 
+
+{% block content %}
+<div class="form-container">
+  <form action="" method="POST">
+    {{ form.csrf_token }}
+    
+    {% if group %} 
+      {{ render_field_data(form.number, group.number) }} 
+    {% else %}
+      {{ render_field(form.number) }} 
+    {% endif %}
+    
+    {{ render_field_data(form.submit, "Создать") }}
+  </form>
+</div>
+{% endblock %}

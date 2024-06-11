@@ -45,4 +45,17 @@ $(document).ready(() => {
     });
   });
 
+  $(".group_button-delete").click((e) => {
+    let id = e.target.id
+
+    $.ajax({
+        method: "POST",
+        url: `/group/delete/${id}`,
+        dataType: "json",
+        success: (data) => {
+            console.log(data)
+            $(`#group_${id}`).hide(20)
+        }
+    })
+  })
 });

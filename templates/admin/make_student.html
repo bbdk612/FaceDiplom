@@ -14,6 +14,15 @@
             {{ form.csrf_token }}
             {{ render_field(form.fio) }}
             {{ render_field(form.image_url) }}
+            <div class="form-group">
+                {{form.group.label}}
+                {{form.group(list="group-list")}}
+                <datalist id="group-list">
+                    {% for group in groups %}
+                        <option>{{ group.number }}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
             {{ render_field_data(form.submit, "Создать") }}
         </form>
     </div>
@@ -21,8 +30,4 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-{% endblock %}
-
-{% block script %}
-    <script src="{{ url_for('static', filename='logout.js') }}"></script>
 {% endblock %}

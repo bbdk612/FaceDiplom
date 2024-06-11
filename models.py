@@ -36,10 +36,10 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
     
     @staticmethod
-    def create(user, password):
+    def create(user):
         user_check = User.query.filter_by(login=user.login).first()
         if user_check is None:
-            user.set_password(password)
+            user.set_password(user.password)
             db.session.add(user)
             db.session.commit()
             return {
@@ -69,18 +69,47 @@ class User(db.Model, UserMixin):
         db.session.delete(user)
         db.session.commit()
 
+class Group(db.Model):
+    __tablename__ = "group"
+    
+    number = db.Column(db.String(10), unique=True, nullable=False, primary_key=True)
+    
+    student = db.relationship("Student", back_populates='group', cascade="all, delete")
+    
+    def __init__(self, number:str):
+        self.number = number
+    
+    @staticmethod
+    def create(group):
+        db.session.add(group)
+        db.session.commit()
+    
+    @staticmethod
+    def update(group_id:int, number:str):
+        group = Group.query.filter_by(number=group_id).first()
+        group.number = number
+        db.session.commit()
+    
+    @staticmethod
+    def delete(id:str):
+        db.session.delete(Group.query.filter_by(number=id).first())
+        db.session.commit()
+
 class Student(db.Model):
     __tablename__ = "student"
     id = db.Column(db.Integer, primary_key=True)
     fio = db.Column(db.String(200), nullable=False)
     image_url = db.Column(db.String(250), nullable=False)
+    group_id = db.Column(db.String, db.ForeignKey("group.number"))
     
     lesson_student = db.relationship("Lesson_Student", back_populates="student", cascade="all, delete") 
     course_student = db.relationship("Course_Student", back_populates="student", cascade="all, delete")
+    group = db.relationship("Group", back_populates="student")
     
-    def __init__(self, fio, image_url):
+    def __init__(self, fio:str, image_url:str, group_id:str):
         self.fio = fio
         self.image_url = image_url
+        self.group_id = group_id
 
     @staticmethod
     def create(student):
@@ -99,6 +128,8 @@ class Student(db.Model):
         stud.fio = student.fio
         stud.image_url = student.image_url
         db.session.commit()
+
+
 
 class Auditory(db.Model):
     __tablename__ = "auditory"
@@ -129,9 +160,10 @@ class Auditory(db.Model):
         db.session.commit()
     
     @staticmethod
-    def update(auditory_id, new_camera):
+    def update(auditory_id, new_auditory:dict):
         auditory = Auditory.query.filter_by(id=auditory_id).first()
-        auditory.camera_address = new_camera
+        auditory.camera_address = new_auditory['camera']
+        auditory.number = new_auditory['number']
         db.session.commit()
 
 class Course(db.Model):
