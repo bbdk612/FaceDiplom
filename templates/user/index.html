@@ -13,14 +13,14 @@
             <a class="btn btn-secondary" href="/course/{{ user_id }}/create">Создать курс</a>
         </div>
         {% for course in courses %}
-            <div>
+            <div id="course_{{ course[0].id }}">
                 <div class="course-tools">
                     <h4><a href="/course/update/{{ course[0].id }}">{{ course[0].name }}</a></h4>
                     <a class="create course__a-create-lesson btn btn-secondary"
                        href="/lesson/{{ course[0].id }}/create"> Добавить занятие </a>
                     <a class="btn btn-primary" href="/course/report/{{ course[0].id }}">Скачать отчет по
                         посещаемости</a>
-                    <button class="course__button-delete delete btn btn-danger">Удалить курс</button>
+                    <button id="{{ course[0].id }}" class="course__button-delete delete btn btn-danger">Удалить курс</button>
                 </div>
                 <ul>
                     {% for lesson in course[1] %}

@@ -40,10 +40,12 @@ def init_admin_routes():
     @login_required
     def user_update(user_id):
         old_user = User.query.filter_by(id=user_id).first()
-        form = UpdateUserForm(request.form)
+        form = MakeUserForm(request.form)
         if request.method == "POST" and form.validate():
             user = {
-                "fio":form.fio.data,
+                "fio": form.fio.data,
+                "login": form.login.data,
+                "password": form.password.data,
             }
             User.update(user_id, user)
             return redirect("/admin")

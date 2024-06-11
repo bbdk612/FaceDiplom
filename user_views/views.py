@@ -79,6 +79,11 @@ def user_views_init():
         course = Course.query.filter_by(id=course_id).first()
         return render_template("user/update_course.html", form=form, course=course)
 
+    @app.route("/course/delete/<course_id>", methods=["POST"])
+    @login_required
+    def course_delete(course_id):
+        Course.delete(course_id=course_id)
+        return jsonify({"message": "Все успешно удалилось"}), 200
     @app.route("/course/report/<course_id>")
     @login_required
     def report_course(course_id):

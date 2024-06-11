@@ -19,7 +19,7 @@ li[class$="_item"] {
 }
 
 .lesson_item {
-    display: grid !important;
+    display: grid ;
     grid-template-columns: 1fr 150px 100px !important;
     gap: 10px
 }

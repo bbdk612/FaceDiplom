@@ -10,8 +10,9 @@
         <form method="POST">
             {{ form.csrf_token }}
             {{ render_field_data(form.fio, old_user.fio) }}
-            <p>Логин: {{ old_user.login }}</p>
-            <p>Пароль: {{ old_user.password }}</p>
+            {{ render_field_data(from.login, old_user.login) }}
+            {{ render_field_data(form.password, old_user.password) }}
+            {{ render_field_data(form.confirm, old_user.password) }}
             {{ render_field_data(form.submit, "Обновить") }}
         </form>
     </div>
@@ -23,4 +24,5 @@
 
 {% block script %}
     <script src="{{ url_for('static', filename='logout.js') }}"></script>
+    <script src="{{ url_for('static', filename='log.js') }}"></script>
 {% endblock %}

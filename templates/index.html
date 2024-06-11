@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 {% endblock %}
@@ -24,7 +23,7 @@
         </div>
         <div class="students-on-lesson"></div>
         <div class="save-checks">
-            <button id="save">
+            <button class="btn btn-primary" id="save">
                 Сохранить отметки
             </button>
         </div>

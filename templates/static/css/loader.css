@@ -10,7 +10,7 @@
     radial-gradient(farthest-side at bottom left,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) top right/50%  50% content-box content-box,
     radial-gradient(farthest-side at top        ,#0000 calc(100% - 6px),currentColor calc(100% - 5px) 99%,#0000) bottom   /100% 50% content-box content-box;
   background-repeat: no-repeat;
-  animation: l11 1s infinite linear;
+  animation: l11 1s infinite ease-in-out;
 }
 @keyframes l11{
   100%{transform: rotate(1turn)}
@@ -19,10 +19,13 @@
 .loader_container {
   width: 100vw;
   height: 100vh;
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1010000;
 }

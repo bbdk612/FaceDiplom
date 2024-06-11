@@ -2,11 +2,14 @@
 # Тут происходит описание всех таблиц в базе данных
 from werkzeug.security import generate_password_hash,  check_password_hash
 from flask_login import UserMixin, login_user, UserMixin
+
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 from core import app
 
 db = SQLAlchemy(app)
-
+migrate = Migrate(app, db)
 
 class User(db.Model, UserMixin):
     __tablename__ = "user"
@@ -26,6 +29,7 @@ class User(db.Model, UserMixin):
         self.password = password
 
     def set_password(self, password: str):
+        self.password = password
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password: str):
@@ -55,6 +59,8 @@ class User(db.Model, UserMixin):
     def update(old_user_id: int, new_user: dict):
         old_user = User.query.filter_by(id=old_user_id).first()
         old_user.fio = new_user["fio"]
+        old_user.set_password(new_user["password"])
+        old_user.login = new_user["login"]
         db.session.commit()
 
     @staticmethod
@@ -154,7 +160,7 @@ class Course(db.Model):
     
     @staticmethod
     def delete(course_id):
-        course = Auditory.query(id=course_id).first()
+        course = Course.query.filter_by(id=course_id).first()
         db.session.delete(course)
         db.session.commit()
     
