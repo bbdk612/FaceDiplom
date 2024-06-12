@@ -43,7 +43,7 @@ def init_admin_routes():
     @login_required
     def user_update(user_id):
         old_user = User.query.filter_by(id=user_id).first()
-        form = MakeUserForm(request.form)
+        form = UpdateUserForm(request.form)
         if request.method == "POST" and form.validate():
             user = {
                 "fio": form.fio.data,
@@ -60,7 +60,7 @@ def init_admin_routes():
         form = MakeUserForm(request.form)
         if request.method == "POST" and form.validate():
             user = User(login=form.login.data, fio=form.fio.data, is_admin=False, password=form.password.data)
-            data = User.create(user, form.password.data)
+            data = User.create(user)
             if data["id"] == -1:
                 flash(data["message"])
                 return redirect("/user/create")
@@ -98,8 +98,9 @@ def init_admin_routes():
             Student.create(student=stud)
             flash("Студент успешно создан")
             return redirect("/admin")
-        groups = Group.query.order_by(Group.number).all();
-        return render_template("admin/make_student.html", form=form, groups=groups)
+        redirected_group = request.args.get('group')
+        groups = Group.query.order_by(Group.number).all()
+        return render_template("admin/make_student.html", form=form, groups=groups, redirected_group=redirected_group)
 
     @app.route("/group/create", methods=["POST", "GET"])
     @login_required
@@ -112,15 +113,15 @@ def init_admin_routes():
         
         return render_template('admin/make_group.html', form=form)
     
-    @app.route('/group/edit/<group_id>', methods=["GET", "POST"])
+    @app.route('/group/edit/<group_number>', methods=["GET", "POST"])
     @login_required
-    def group_edit(group_id):
+    def group_edit(group_number):
         form = GroupForm(request.form)
         if request.method == "POST":
-            Group.update(group_id=group_id, number=form.number.data)
+            Group.update(group_id=group_number, number=form.number.data)
             return redirect('/')
         
-        group = Group.query.filter_by(id=group_id).first()
+        group = Group.query.filter_by(id=group_number).first()
         return render_template("admin/make_group.html", group=group)   
     
     @app.route('/group/delete/<group_id>', methods=["POST"])

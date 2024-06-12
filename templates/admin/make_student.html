@@ -16,7 +16,11 @@
             {{ render_field(form.image_url) }}
             <div class="form-group">
                 {{form.group.label}}
+                {% if redirected_group %}
+                {{form.group(list="group-list", value=redirected_group)}}
+                {% else %}
                 {{form.group(list="group-list")}}
+                {% endif %}
                 <datalist id="group-list">
                     {% for group in groups %}
                         <option>{{ group.number }}</option>

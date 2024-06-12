@@ -1,18 +1,25 @@
 from io import StringIO
 
 from core import app
-from flask_login import login_required, current_user
+from flask_login import login_required
 from flask import (
     render_template,
     request,
     redirect,
     jsonify,
     flash,
-    get_flashed_messages,
     Response,
 )
 from forms import CoursesForm, LessonForm
-from models import Student, Course, Course_Student, Auditory, Lesson, Lesson_Student
+from models import (
+    Student,
+    Course,
+    Course_Student,
+    Auditory,
+    Lesson,
+    Lesson_Student,
+    Group,
+)
 from datetime import datetime
 import pandas as pd
 
@@ -21,69 +28,110 @@ def user_views_init():
     @app.route("/course/<user_id>/create", methods=["POST", "GET"])
     @login_required
     def create_course(user_id):
+        """
+        Creates a new course in the database.
+
+        Parameters:
+        user_id (str): The unique identifier of the user creating the course.
+
+        Returns:
+        render_template: A rendered HTML template for creating a course if the request method is GET.
+        redirect: A redirection to the home page after successful course creation if the request method is POST.
+        """
         form = CoursesForm(request.form)
         form.students.choices = [
             (stud.id, stud.fio) for stud in Student.query.order_by(Student.fio).all()
         ]
 
         if request.method == "POST":
-            course = Course(name=form.name.data, user_id=user_id)
+            course = Course(name=request.form['name'], user_id=user_id)
             course_data = Course.create(course)
             if course_data["id"] == -1:
                 flash(course_data["message"])
             else:
                 flash("Курс успешно создан")
-                for student_id in form.students.data:
-                    cs = Course_Student(course.id, student_id)
+                students = request.form.get('students').split()
+                print(students)
+                for student_id in students:
+                    print(student_id)
+                    cs = Course_Student(course_id=course.id, student_id=student_id)
                     Course_Student.create(cs)
-                return redirect("/")
+                return jsonify({"message": "Курс успешно создан"})
 
-        return render_template("user/make_course.html", form=form)
+        groups = Group.query.order_by(Group.number).all()
+        return render_template("user/make_course.html", form=form, groups=groups)
 
     @app.route("/course/update/<course_id>", methods=["POST", "GET"])
     @login_required
     def update_course(course_id):
+        """
+        Updates a course in the database.
+
+        Parameters:
+        course_id (str): The unique identifier of the course to be updated.
+
+        Returns:
+        render_template: A rendered HTML template for updating a course.
+        redirect: A redirection to the home page after successful update.
+        """
         form = CoursesForm(request.form)
         form.students.choices = [
             (stud.id, stud.fio) for stud in Student.query.order_by(Student.fio).all()
         ]
         if request.method == "POST":
+            # Delete all existing course-student relations
             css = Course_Student.query.filter_by(course_id=course_id).all()
             for cs in css:
                 Course_Student.delete(cs)
 
+            # Delete all existing lesson-student relations
             lessons = Lesson.query.filter_by(course_id=course_id).all()
             for lesson in lessons:
                 lss = Lesson_Student.query.filter_by(lesson_id=lesson.id).all()
                 for ls in lss:
                     Lesson_Student.delete(ls)
 
+            # Update the course
             course_data = Course.update(course_id=course_id, new_name=form.name.data)
             if course_data["id"] == -1:
                 flash(course_data["message"])
             else:
                 flash("Курс успешно создан")
+                # Create new course-student relations
                 for student in form.students.data:
                     cs = Course_Student(course_id=course_id, student_id=student)
                     Course_Student.create(cs)
+                    # Create new lesson-student relations
                     for lesson in lessons:
                         ls = Lesson_Student(lesson_id=lesson.id, student_id=student)
                         Lesson_Student.create(ls)
 
                 return redirect("/")
 
+        # Set the selected students for the course
         form.students.data = [
             cs.student_id
             for cs in Course_Student.query.filter_by(course_id=course_id).all()
         ]
+        # Get the course to be updated
         course = Course.query.filter_by(id=course_id).first()
         return render_template("user/update_course.html", form=form, course=course)
 
     @app.route("/course/delete/<course_id>", methods=["POST"])
     @login_required
     def course_delete(course_id):
+        """
+        Deletes a course from the database.
+
+        Parameters:
+        course_id (str): The unique identifier of the course to be deleted.
+
+        Returns:
+        jsonify: A JSON response indicating the success of the deletion.
+        """
         Course.delete(course_id=course_id)
         return jsonify({"message": "Все успешно удалилось"}), 200
+
     @app.route("/course/report/<course_id>")
     @login_required
     def report_course(course_id):
@@ -194,17 +242,16 @@ def user_views_init():
     @login_required
     def check_edit(lesson_id):
         lesson_students = Lesson_Student.query.filter_by(lesson_id=lesson_id).all()
-        return render_template('user/check_edit.html', lesson_students=lesson_students)
+        return render_template("user/check_edit.html", lesson_students=lesson_students)
 
-
-    @app.route('/lesson/student/<sl_id>/check', methods=["POST"])
+    @app.route("/lesson/student/<sl_id>/check", methods=["POST"])
     @login_required
     def check_student(sl_id):
         lesson = Lesson_Student.query.filter_by(id=sl_id).first()
         lesson.set_checked()
         return jsonify({"message": "ok"})
 
-    @app.route('/lesson/student/<sl_id>/uncheck', methods=["POST"])
+    @app.route("/lesson/student/<sl_id>/uncheck", methods=["POST"])
     @login_required
     def uncheck_student(sl_id):
         lesson = Lesson_Student.query.filter_by(id=sl_id).first()

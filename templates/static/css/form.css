@@ -34,3 +34,14 @@
 .check_user label {
     font-size: 1.6em;
 }
+
+.groups-students-list {
+    max-width: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+
+}
+
+.group_item span {
+    cursor: pointer;
+}

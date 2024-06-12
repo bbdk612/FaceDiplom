@@ -16,14 +16,10 @@ li[class$="_item"] {
     grid-template-columns: 1fr 150px;
     font-size: 1.6em;
     padding-top: 10px;
+    align-items: center;
 }
 
-.lesson_item {
-    display: grid ;
-    grid-template-columns: 1fr 150px 100px !important;
-    gap: 10px
-}
-.student_item {
+.lesson_item, .student_item, .group_item {
     grid-template-columns: 1fr 150px 100px !important;
     gap: 10px
 }

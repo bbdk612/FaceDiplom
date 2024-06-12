@@ -1,29 +1,32 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% from "macroces/field_macro.html" import render_field, render_field_data %}
-
+{% from 'macroces/field_macro.html' import render_field, render_field_data, check_list_group %}
 {% from 'macroces/header_macro.html' import edit_header %}
 
 {% block header %}
-    {{ edit_header() }}
+  {{ edit_header() }}
 {% endblock %}
 
 {% block content %}
-    <div class="form-container">
-        <form action="" method="POST">
-            {{ render_field(form.name) }}
-            <div>
-                {% for student in form.students %} {{ render_field(student) }} {% endfor %}
-            </div>
-            {{ render_field_data(form.submit, "Создать") }}
-        </form>
-    </div>
+  <div class="form-container">
+    <form action="" method="POST">
+      {{ render_field(form.name) }}
+      <ul class="groups-students-list">
+        {% for group in groups %}
+          {{ check_list_group(group) }}
+        {% endfor %}
+      </ul>
+      <div class="form-group">
+        <input id="submit" type="button" value="Создать">
+      </div>
+    </form>
+  </div>
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" />
 {% endblock %}
 
 {% block script %}
-    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+  <script src="{{ url_for('static', filename='create-course.js') }}"></script>
 {% endblock %}

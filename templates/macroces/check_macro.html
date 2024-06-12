@@ -1,10 +1,11 @@
 {% macro check_student(data, mark) %}
-    <div class="check_user" id="check_{{ data.id }}">
+    <span class="check_user" id="check_{{ data.id }}">
         {% if mark %}
             <input type="checkbox" name="{{ data.id }}" id="{{ data.id }}" checked>
         {% else %}
             <input type="checkbox" name="{{ data.id }}" id="{{ data.id }}">
         {% endif %}
         <label for="{{ data.id }}">{{ data.student.fio }}</label>
-    </div>
+    </span>
 {% endmacro %}
+
