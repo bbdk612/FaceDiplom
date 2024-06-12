@@ -12,9 +12,12 @@
     <div class="form-container">
         <form method="POST" action="">
             {{ render_field_data(form.name, course.name) }}
-            <div>
-                {% for student in form.students %} {{ render_field(student) }} {% endfor %}
-            </div>
+            <h5>Список студентов на курсе</h5>
+            <ul>
+                {% for student in students %}
+                <li> <span>{{ student.fio }}</span> <span>{{ student.group_id }}</span> </li>
+                {% endfor %}
+            </ul>
             {{ render_field_data(form.submit, "Обновить") }}
         </form>
     </div>

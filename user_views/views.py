@@ -44,13 +44,13 @@ def user_views_init():
         ]
 
         if request.method == "POST":
-            course = Course(name=request.form['name'], user_id=user_id)
+            course = Course(name=request.form["name"], user_id=user_id)
             course_data = Course.create(course)
             if course_data["id"] == -1:
                 flash(course_data["message"])
             else:
                 flash("Курс успешно создан")
-                students = request.form.get('students').split()
+                students = request.form.get("students").split()
                 print(students)
                 for student_id in students:
                     print(student_id)
@@ -79,43 +79,22 @@ def user_views_init():
             (stud.id, stud.fio) for stud in Student.query.order_by(Student.fio).all()
         ]
         if request.method == "POST":
-            # Delete all existing course-student relations
-            css = Course_Student.query.filter_by(course_id=course_id).all()
-            for cs in css:
-                Course_Student.delete(cs)
-
-            # Delete all existing lesson-student relations
-            lessons = Lesson.query.filter_by(course_id=course_id).all()
-            for lesson in lessons:
-                lss = Lesson_Student.query.filter_by(lesson_id=lesson.id).all()
-                for ls in lss:
-                    Lesson_Student.delete(ls)
-
             # Update the course
             course_data = Course.update(course_id=course_id, new_name=form.name.data)
             if course_data["id"] == -1:
                 flash(course_data["message"])
             else:
                 flash("Курс успешно создан")
-                # Create new course-student relations
-                for student in form.students.data:
-                    cs = Course_Student(course_id=course_id, student_id=student)
-                    Course_Student.create(cs)
-                    # Create new lesson-student relations
-                    for lesson in lessons:
-                        ls = Lesson_Student(lesson_id=lesson.id, student_id=student)
-                        Lesson_Student.create(ls)
-
+                
                 return redirect("/")
-
-        # Set the selected students for the course
-        form.students.data = [
-            cs.student_id
+        
+        students = [
+            cs.student
             for cs in Course_Student.query.filter_by(course_id=course_id).all()
         ]
         # Get the course to be updated
         course = Course.query.filter_by(id=course_id).first()
-        return render_template("user/update_course.html", form=form, course=course)
+        return render_template("user/update_course.html", form=form, course=course, students=students)
 
     @app.route("/course/delete/<course_id>", methods=["POST"])
     @login_required
