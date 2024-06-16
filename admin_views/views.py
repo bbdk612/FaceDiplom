@@ -161,8 +161,8 @@ def init_admin_routes():
     @login_required
     def update_student(student_id):
         form = MakeStudentForm(request.form)
-        if request.method == "POST" and form.validate():
-            stud = Student(fio=form.fio.data, image_url=form.image_url.data)
+        if request.method == "POST":
+            stud = {"fio":form.fio.data, "image_url":form.image_url.data}
             Student.update(id=student_id, student=stud)
             return redirect("/admin")
 

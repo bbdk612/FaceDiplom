@@ -123,10 +123,10 @@ class Student(db.Model):
         db.session.commit()
 
     @staticmethod 
-    def update(id, student):
+    def update(id, student:dict):
         stud = Student.query.filter_by(id=id).first()
-        stud.fio = student.fio
-        stud.image_url = student.image_url
+        stud.fio = student["fio"]
+        stud.image_url = student["image_url"]
         db.session.commit()
 
 

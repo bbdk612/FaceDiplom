@@ -8,11 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+    
     <div class="container">
         <div class="user-list">
             <div class="user-tools">
@@ -60,4 +56,5 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 {% endblock %}

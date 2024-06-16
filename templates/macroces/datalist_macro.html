@@ -37,11 +37,13 @@
     {% for d in data %}
       <div id="group_{{ d.number }}">
         <li class="group_item">
-          <span>{{ d.number }}</span>
+          <span data-group-number="{{ d.number }}">{{ d.number }}</span>
           <button type="button" class="group_button-delete btn btn-danger btn-sm" id="{{ d.number }}">Удалить</button>
           <a href="/student/create?group={{ d.number }}" class="btn btn-primary btn-sm">Добавить студента</a>
         </li>
-        {{ render_student_data(d.student, 'student') }}
+        <div data-group-number="{{ d.number }}">
+          {{ render_student_data(d.student, 'student') }}
+        </div>
       </div>
     {% endfor %}
   </ul>
