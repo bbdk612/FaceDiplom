@@ -1,62 +1,48 @@
 {% macro render_user_data(data, data_class) %}
-<ul class="{{ data_class }}_list">
+  <ul class="{{ data_class }}_list">
     {% for d in data %}
-    <li id="user_{{ d.id }}" class="{{ data_class }}_item">
+      <li id="user_{{ d.id }}" class="{{ data_class }}_item">
         <a href="/{{ data_class }}/update/{{ d.id }}">{{ d.fio }}</a>
-        <span>
-            <button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">
-                Удалить
-            </button>
-        </span>
-    </li>
+        <span><button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">Удалить</button></span>
+      </li>
     {% endfor %}
-</ul>
+  </ul>
 {% endmacro %}
 
 {% macro render_student_data(data, data_class) %}
-<ul class="{{ data_class }}_list">
+  <ul class="{{ data_class }}_list">
     {% for d in data %}
-    <li id="{{ data_class }}_{{ d.id }}" class="{{ data_class }}_item">
+      <li id="{{ data_class }}_{{ d.id }}" class="{{ data_class }}_item">
         <a href="/student/update/{{ d.id }}">{{ d.fio }}</a>
-        <span class="group">
-            {{ d.group.number }}
-        </span>
-        <span>
-            <button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">
-                Удалить
-            </button>
-        </span>
-    </li>
+        <span class="group">{{ d.group.number }}</span>
+        <span><button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">Удалить</button></span>
+      </li>
     {% endfor %}
-</ul>
+  </ul>
 {% endmacro %}
 
 {% macro render_auditory_data(data, data_class) %}
-<ul class="{{ data_class }}_list">
+  <ul class="{{ data_class }}_list">
     {% for d in data %}
-    <li id="{{ data_class }}_{{ d.id }}" class="{{ data_class }}_item">
+      <li id="{{ data_class }}_{{ d.id }}" class="{{ data_class }}_item">
         <span>{{ d.number }}</span>
-        <span>
-            <button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">
-                Удалить
-            </button>
-        </span>
-    </li>
+        <span><button type="button" class="{{ data_class }}_button-delete btn btn-danger" id="{{ d.id }}">Удалить</button></span>
+      </li>
     {% endfor %}
-</ul>
+  </ul>
 {% endmacro %}
 
 {% macro render_group_data(data) %}
-<ul class="group_list">
+  <ul class="group_list">
     {% for d in data %}
-    <li id="group_{{d.number}}" class="group_item">
-        <span>{{ d.number }}</span>
-        <button type="button" class="group_button-delete btn btn-danger btn-sm" id="{{ d.number }}">
-            Удалить
-        </button>
-        <a href="/student/create?group={{ d.number }}" class="btn btn-primary btn-sm">Добавить студента</a>
-    </li>
-    {{ render_student_data(d.student, "student") }}</li>
+      <div id="group_{{ d.number }}">
+        <li class="group_item">
+          <span>{{ d.number }}</span>
+          <button type="button" class="group_button-delete btn btn-danger btn-sm" id="{{ d.number }}">Удалить</button>
+          <a href="/student/create?group={{ d.number }}" class="btn btn-primary btn-sm">Добавить студента</a>
+        </li>
+        {{ render_student_data(d.student, 'student') }}
+      </div>
     {% endfor %}
-</ul>
+  </ul>
 {% endmacro %}

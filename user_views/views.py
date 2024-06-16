@@ -85,18 +85,20 @@ def user_views_init():
                 flash(course_data["message"])
             else:
                 flash("Курс успешно создан")
-                
+
                 return redirect("/")
-        
+
         students = [
             cs.student
             for cs in Course_Student.query.filter_by(course_id=course_id).all()
         ]
         # Get the course to be updated
         course = Course.query.filter_by(id=course_id).first()
-        return render_template("user/update_course.html", form=form, course=course, students=students)
+        return render_template(
+            "user/update_course.html", form=form, course=course, students=students
+        )
 
-    @app.route("/course/delete/<course_id>", methods=["POST"])
+    @app.route("/course/delete/<course_id>", methods=["DELETE"])
     @login_required
     def course_delete(course_id):
         """
@@ -203,7 +205,7 @@ def user_views_init():
         form.auditory.data = [lesson.auditory_id]
         return render_template("user/update_lesson.html", form=form, lesson=lesson)
 
-    @app.route("/lesson/delete/<lesson_id>", methods=["POST"])
+    @app.route("/lesson/delete/<lesson_id>", methods=["DELETE"])
     @login_required
     def delete_lesson(lesson_id):
         Lesson.delete(id=lesson_id)

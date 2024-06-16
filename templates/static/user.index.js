@@ -3,7 +3,7 @@ $(document).ready(() => {
     let id = e.target.id;
 
     $.ajax({
-      method: "POST",
+      method: "DELETE",
       url: `/lesson/delete/${id}`,
       dataType: "json",
       success: (data) => {
@@ -19,7 +19,7 @@ $(document).ready(() => {
     let id = e.target.id;
 
     $.ajax({
-      method: "POST",
+      method: "DELETE",
       url: `/course/delete/${id}`,
       dataType: "json",
       success: (data) => {
@@ -28,8 +28,6 @@ $(document).ready(() => {
       },
     });
   });
-
-  
 
   $(".logout").click(() => {
     $.ajax({

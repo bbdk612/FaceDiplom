@@ -2,7 +2,7 @@ $(document).ready(() => {
   $(".user_button-delete").click((e) => {
     let id = e.target.id;
     $.ajax({
-      method: "POST",
+      method: "DELETE",
       url: `/user/delete/${id}`,
       dataType: "json",
       success: (data) => {
@@ -17,7 +17,7 @@ $(document).ready(() => {
   $(".student_button-delete").click((e) => {
     let id = e.target.id;
     $.ajax({
-      method: "POST",
+      method: "DELETE",
       url: `/student/delete/${id}`,
       dataType: "json",
       success: (data) => {
@@ -32,7 +32,7 @@ $(document).ready(() => {
   $(".auditory_button-delete").click((e) => {
     let id = e.target.id;
     $.ajax({
-      method: "POST",
+      method: "DELETE",
       url: `/auditory/delete/${id}`,
       dataType: "json",
       success: (data) => {
@@ -46,16 +46,16 @@ $(document).ready(() => {
   });
 
   $(".group_button-delete").click((e) => {
-    let id = e.target.id
+    let id = e.target.id;
 
     $.ajax({
-        method: "POST",
-        url: `/group/delete/${id}`,
-        dataType: "json",
-        success: (data) => {
-            console.log(data)
-            $(`#group_${id}`).hide(20)
-        }
-    })
-  })
+      method: "DELETE",
+      url: `/group/delete/${id}`,
+      dataType: "json",
+      success: (data) => {
+        console.log(data);
+        $(`#group_${id}`).hide(20);
+      },
+    });
+  });
 });
